@@ -1,1 +1,1 @@
-# recitation-015-Team-01-ProjectName
+# recitation-015-Team-01-SocialSweat
