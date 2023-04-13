@@ -44,4 +44,22 @@ app.get("/login", (req, res) => {
     res.json({status: 'success', message: 'Welcome!'});
   });
 
+  const axios = require("axios");
+
+  const options = {
+    method: 'GET',
+    url: 'https://exercises-by-api-ninjas.p.rapidapi.com/v1/exercises',
+    params: {muscle: 'biceps'},
+    headers: {
+      'X-RapidAPI-Key': 'd118bffb72mshefac1d32ada5f14p1523e5jsnc3415735b0dc',
+      'X-RapidAPI-Host': 'exercises-by-api-ninjas.p.rapidapi.com'
+    }
+  };g
+
+  axios.request(options).then(function (response) {
+    console.log(response.data);
+  }).catch(function (error) {
+    console.error(error);
+  });
+
   module.exports = app.listen(3000);
