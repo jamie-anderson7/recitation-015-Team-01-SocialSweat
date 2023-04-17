@@ -136,7 +136,7 @@ app.get('workouts',(req, res) => {
       'X-RapidAPI-Key': 'd118bffb72mshefac1d32ada5f14p1523e5jsnc3415735b0dc',
       'X-RapidAPI-Host': 'exercises-by-api-ninjas.p.rapidapi.com'
     }
-  };g
+  };/* Deleted a 'g' here because it caused a syntax error */
 
   axios.request(options).then(function (response) {
     console.log(response.data);
