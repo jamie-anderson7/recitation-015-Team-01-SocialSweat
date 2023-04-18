@@ -57,47 +57,53 @@ app.use(
   })
 );
 
-
 // Login Routes
 app.get("/login", (req, res) => {
-    res.render("pages/login");
-  });
+  res.render("pages/login");
+});
+
+app.post("/login", (req, res) => {
+  const InputUser = req.body.username;
+  const InputPass = req.body.password;
   
-  app.post("/login", (req, res) => {
-    const InputUser = req.body.username;
-    const InputPass = req.body.password;
+
+  const query = `SELECT * FROM users WHERE users.username = '${req.body.username}';`;
+  db.one(query)
+  .then( /*commented out async here because it caused an error */(user) => {
+    // if(user == '')
+    // {
+    //   res.redirect("/register");
+    // }
     
-  
-    const query = `SELECT * FROM users WHERE users.username = '${req.body.username}';`;
-    db.one(query)
-    .then( async (user) => {
-      if(user == '')
-      {
-        res.redirect("/register");
-      }
+    // check if password from request matches with password in DB
+
+    //For the purposes of lab 11 I am commenting this out
+    //const match = await bcrypt.compare(req.body.password, user.password);
+
+    // This is also changed from if(match === true){}
+    if(user.password == req.body.password){
+      //save user details in session like in lab 8
       
-      // check if password from request matches with password in DB
-      // console.log(req.body.password);
-      // console.log(req.body.username);
-      // console.log(user.username);
-      // console.log(user.password);
-      const match = await bcrypt.compare(req.body.password, user.password);
-  
-      if(match === true){
-        //save user details in session like in lab 8
-        req.session.user = user;
-        req.session.save();
-        res.redirect("/discover");
-      }
-      else{
-        res.render("partials/message", {
-          message : 'Incorrect username or password',
-          error : true
-        });
-      }
-    });
-  
+      // Commented out because there is no discover page
+      // req.session.user = user;
+      // req.session.save();
+      // res.redirect("/discover");
+      res.status(200).json({
+        message: 'Success'
+      });
+    }
+    else{
+      // res.render("partials/message", {
+      //   message : 'Incorrect username or password',
+      //   error : true
+      // });
+      res.status(200).json({
+        message: 'Incorrect username or password'
+      });
+    }
   });
+
+});
 
   app.get('/welcome', (req, res) => {
     res.json({status: 'success', message: 'Welcome!'});
@@ -109,7 +115,7 @@ app.get("/login", (req, res) => {
         'X-RapidAPI-Key': 'd118bffb72mshefac1d32ada5f14p1523e5jsnc3415735b0dc',
         'X-RapidAPI-Host': 'exercises-by-api-ninjas.p.rapidapi.com'
       }
-    };
+    };g
   
     axios.request(options).then(function (response) {
       console.log(response.data);
@@ -120,8 +126,8 @@ app.get("/login", (req, res) => {
 
 // EXTERNAL API - WORKOUT SHOP
 
-app.get('/workouts',(req, res) => {
-  res.render('pages/workouts')
+app.get('workouts',(req, res) => {
+  res.render('views/pages/workouts')
   const options = {
     method: 'GET',
     url: 'https://exercises-by-api-ninjas.p.rapidapi.com/v1/exercises',
@@ -130,7 +136,7 @@ app.get('/workouts',(req, res) => {
       'X-RapidAPI-Key': 'd118bffb72mshefac1d32ada5f14p1523e5jsnc3415735b0dc',
       'X-RapidAPI-Host': 'exercises-by-api-ninjas.p.rapidapi.com'
     }
-  };
+  };/* Deleted a 'g' here because it caused a syntax error */
 
   axios.request(options).then(function (response) {
     console.log(response.data);
