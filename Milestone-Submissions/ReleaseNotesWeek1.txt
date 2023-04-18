@@ -1,0 +1,20 @@
+What's Changed:
+header file done by @ImadDar123 in #18
+updating docker-compose by @AlexPhilipsen in #19
+Leaderboard structure by @AlexPhilipsen in #21
+Added package.json file for lab11 - suctuk by @suctuk in #22
+Added login routes and login page for lab 11 by @AlexPhilipsen in #23
+footer made, login updated, test folder created by @ImadDar123 in #25
+Updated index and create by @AlexPhilipsen in #26
+added api call to index.js by @jamie-anderson7 in #27
+External api by @suctuk in #28
+created search bar for workouts page, fixed package.json file, change… by @jamie-anderson7 in #29
+Lab11 tests by @AlexPhilipsen in #30
+
+New Contributors:
+@ImadDar123 made their first contribution in #18
+@AlexPhilipsen made their first contribution in #19
+@suctuk made their first contribution in #22
+@jamie-anderson7 made their first contribution in #27
+
+Full Changelog: https://github.com/jamie-anderson7/recitation-015-Team-01-SocialSweat/commits/v1.0.0
