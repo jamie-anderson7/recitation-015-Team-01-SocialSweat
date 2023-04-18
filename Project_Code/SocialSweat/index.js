@@ -131,7 +131,7 @@ app.get('workouts',(req, res) => {
   const options = {
     method: 'GET',
     url: 'https://exercises-by-api-ninjas.p.rapidapi.com/v1/exercises',
-    params: {muscle: 'biceps'},
+    params: {muscle: 'calves'},
     headers: {
       'X-RapidAPI-Key': 'd118bffb72mshefac1d32ada5f14p1523e5jsnc3415735b0dc',
       'X-RapidAPI-Host': 'exercises-by-api-ninjas.p.rapidapi.com'
