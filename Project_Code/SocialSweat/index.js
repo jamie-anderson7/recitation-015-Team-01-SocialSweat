@@ -57,6 +57,30 @@ app.use(
   })
 );
 
+// Register
+
+app.get("/register", (req, res) => {
+  res.render("pages/register")
+});
+
+app.post("/register", async (req, res) => {
+  //hash the password using bcrypt library
+  const hash = await bcrypt.hash(req.body.password, 10);
+
+  // To-DO: Insert username and hashed password into 'users' table
+  let ins = `INSERT INTO users (username, password) VALUES ('${req.body.username}', '${hash}');`;
+  db.any(ins)
+  .then(data => {
+    res.redirect("/login");
+  })
+  .catch( (err) => {
+    console.log(err);
+    res.redirect("/register");
+  });
+});
+
+
+
 // Login Routes
 app.get("/login", (req, res) => {
   res.render("pages/login");
