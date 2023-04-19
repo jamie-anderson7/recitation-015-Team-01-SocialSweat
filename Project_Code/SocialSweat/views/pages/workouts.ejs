@@ -4,7 +4,11 @@
         <h1>Search Workout</h1>
         <label for="muscle-group">Muscle Group</label>
         <input type="text" id="muscle-group" name="muscle-group"/>
-
+        <ul>
+          <% for (let item of data) { %>
+            <li><%= item.name %></li>
+          <% } %>
+        </ul>
       </form>
       
     </div>
