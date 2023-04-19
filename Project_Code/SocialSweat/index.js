@@ -107,27 +107,26 @@ app.post("/login", (req, res) => {
 
   app.get('/welcome', (req, res) => {
     res.json({status: 'success', message: 'Welcome!'});
-    const options = {
-      method: 'GET',
-      url: 'https://exercises-by-api-ninjas.p.rapidapi.com/v1/exercises',
-      params: {muscle: 'biceps'},
-      headers: {
-        'X-RapidAPI-Key': 'd118bffb72mshefac1d32ada5f14p1523e5jsnc3415735b0dc',
-        'X-RapidAPI-Host': 'exercises-by-api-ninjas.p.rapidapi.com'
-      }
-    };g
+  //   const options = {
+  //     method: 'GET',
+  //     url: 'https://exercises-by-api-ninjas.p.rapidapi.com/v1/exercises',
+  //     params: {muscle: 'biceps'},
+  //     headers: {
+  //       'X-RapidAPI-Key': 'd118bffb72mshefac1d32ada5f14p1523e5jsnc3415735b0dc',
+  //       'X-RapidAPI-Host': 'exercises-by-api-ninjas.p.rapidapi.com'
+  //     }
+  //   };g
   
-    axios.request(options).then(function (response) {
-      console.log(response.data);
-    }).catch(function (error) {
-      console.error(error);
-    });
-  });
+  //   axios.request(options).then(function (response) {
+  //     console.log(response.data);
+  //   }).catch(function (error) {
+  //     console.error(error);
+  //   });
+ });
 
 // EXTERNAL API - WORKOUT SHOP
 
-app.get('workouts',(req, res) => {
-  res.render('views/pages/workouts')
+app.get('/workouts',(req, res) => {
   const options = {
     method: 'GET',
     url: 'https://exercises-by-api-ninjas.p.rapidapi.com/v1/exercises',
@@ -139,7 +138,8 @@ app.get('workouts',(req, res) => {
   };/* Deleted a 'g' here because it caused a syntax error */
 
   axios.request(options).then(function (response) {
-    console.log(response.data);
+    console.log(response.data)
+    res.render('pages/workouts', {data: response.data})
   }).catch(function (error) {
     console.error(error);
   });

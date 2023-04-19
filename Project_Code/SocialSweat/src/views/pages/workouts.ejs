@@ -1,3 +1,6 @@
+<%- include ('../partials/head') %>
+
+
 <main>
     <div class="container">
       <form action="/workouts" method="POST">
@@ -6,7 +9,7 @@
         <input type="text" id="muscle-group" name="muscle-group"/>
         <ul>
           <% for (let item of data) { %>
-            <li><%= item.name %></li>
+            <li><%= item %></li>
           <% } %>
         </ul>
       </form>
@@ -15,3 +18,4 @@
 </main>
 
 
+<%- include ('../partials/footer') %>
