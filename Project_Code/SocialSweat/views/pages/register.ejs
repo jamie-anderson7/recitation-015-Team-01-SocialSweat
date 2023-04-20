@@ -4,9 +4,15 @@
   <div class="container">
     <!-- THE REST OF YOUR HTML CODE GOES HERE -->
     <form action="/register" method="POST">
-        <input name="username"/>
-        <input name="password"/>
+
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" />
+        
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" />
+
         <button type="submit">Register</button>
+
     </form>
   </div>
 </main>
