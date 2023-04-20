@@ -22,5 +22,5 @@ CREATE TABLE IF NOT EXISTS workouts (
     sweats INT
 );
 
-/* Creating a valid usesr for lab 11 */
+/* Creating a valid user for lab 11 */
 INSERT INTO users (username, password, sweats) VALUES ('username', 'password', 0);
