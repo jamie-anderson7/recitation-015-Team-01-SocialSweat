@@ -70,7 +70,7 @@ describe('Server!', () => {
     chai
       .request(server)
       .post('/register')
-      .send({username: 'username', password: 'password'})
+      .send({username: 'newUser', password: 'password'})
       .end((err, res) => {
         expect(res).to.have.status(200);
         expect(res.body.message).to.equals('Cannot add, user already exists.');
