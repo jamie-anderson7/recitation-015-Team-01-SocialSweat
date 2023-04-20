@@ -106,11 +106,21 @@ app.post("/register", async (req, res) => {
   });
 });
 
+//LeaderBoard
+app.get('/leaderboard', (req, res) => {
+  res.render('pages/leaderboard.ejs');
+});
 
+//Home
+app.get('/home', (req, res) => {
+  res.render('pages/home.ejs');
+});
+
+//
 
 // Login Routes
 app.get("/login", (req, res) => {
-  res.render("pages/login");
+  res.render("pages/login.ejs");
 });
 
 app.post("/login", (req, res) => {
