@@ -149,12 +149,18 @@ app.post("/login", (req, res) => {
  });
 
 // EXTERNAL API - WORKOUT SHOP
-
+//Eventual Goal:
+// if sweats <= 100:
+//    diffVar = beginner
+// else if 100 < sweats <= 200:
+//    diffVar = intermediate
+// else:
+//    diffVar = advanced
 app.get('/workouts',(req, res) => {
   const options = {
     method: 'GET',
     url: 'https://exercises-by-api-ninjas.p.rapidapi.com/v1/exercises',
-    params: {muscle: 'calves'},
+    params: {difficulty: 'beginner'},
     headers: {
       'X-RapidAPI-Key': 'd118bffb72mshefac1d32ada5f14p1523e5jsnc3415735b0dc',
       'X-RapidAPI-Host': 'exercises-by-api-ninjas.p.rapidapi.com'
