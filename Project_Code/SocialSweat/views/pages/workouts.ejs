@@ -1,57 +1,23 @@
-<%- include ('../partials/head') %>
-
+<!-- Currently displays one workout given parameters, do we want to display multiple workouts?
+Needs css to look better
+Working on formatting, more in the middle of the page, smaller, easier to read -->
 <main>
-    <div class="container">
-      <form action="/workouts" method="POST">
-        <h1>Search Workout</h1>
-        <label for="muscle-group">Muscle Group</label>
-        <input type="text" id="muscle-group" name="muscle-group"/>
-        <ul>
-          <!-- <% for (let item of data) { %>
-            <li><%= item.name %></li>
-            <li><%= item.instructions %></li>
-          <% } %> -->
-          <!-- <div id="Featured Workouts">
-            <div class="row" style="justify-content: center;">
-                <div class="col-sm-3">
-                    <div class="card" style="width: 18rem;" id="hobby-card-1">
-                        <div class="card-body">
-                            <h5 class="card-title">Featured Workout</h5> -->
-                            <ul>
-                              <% for (let item of data) { %>
-                                <li><%= item.name %></li>
-                                <li><%= item.instructions %></li>
-                              <% } %>
-                              </ul>
-                            <!-- <p class="card-text">I really enjoy playing video games in my spare time.</p> -->
-                        <!-- </div>
-                    </div>
-                </div> -->
-                <!-- <div class="col-sm-3">
-                    <div class="card" style="width: 18rem;" id="hobby-card-2">
-                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAH0AAAB9CAMAAAC4XpwXAAAAZlBMVEX///8AAAD7+/usrKy1tbVXV1exsbFkZGRUVFRdXV319fXu7u4xMTHPz89aWlorKyu7u7tJSUkfHx+QkJDFxcU/Pz/g4OA3NzehoaElJSV7e3ubm5saGhrZ2dkVFRVwcHCHh4cLCwvB8n2FAAAC7UlEQVRoge3b23KjMAwGYBtCIDgkEDAQGgh9/5fcQNocsbyz7S/dLLed6TcQIUuyUepHV26Logt+9j/+/Qq11pGovvuvC+mJqN4YSV3Xonomqpeieiyqb6XCbtZ1Jap3ovohldR1K6oPorr+ENVlsu1N34jqIs/+rkusNQ/6nj/fPujaiur8CfdJZ4+8Z12vRHXmtfZVP/WSuh4437s3nbXMetd1xFdqLOj6LKrz1feTXmTh7pnPGfWph01D+8gzvXf3DjqoNnedab176t+r4sbHLD398/QgCPffPEuN/Tq7SLtvnqPUeZ+cVIevnMfw7NdvujJf0cdQayzot6ePf+2WdKXOs54I6crypDyHbubQ26JXO4eu8vnmQyH9+tNb8M079Xq+eXCR6dTVOOmRlG7mm8e29W79evPYuJt0x85Ij884hK62Ew9dayi9hSd7Sq/hPzylz9keWl2TeqnBrQWpV+igX1F6fbykemTQk3pQgMs7Ulfxpa+Q00dR/VJvN3L6JegLIO7RM/D77tWhuW7S3TvgF30tqkOLG1qvwOs7rbfYkPfoHXhqTesJeIZA6mZ/wjYzk75x6Rl6n4zUS3QPTerNAN6hpPRa77A4qYfw/p3SLXxrmNAN/iwKobf4qdHKOREO7Cd8i2TWF/+S6RGNE/rIMKt06mZg2JJ26iHHnqxTT44ME3KX3rPshrv08cSxL+TQU3iKp/Q1ekJL6pbn+MuyblD7YUHWdnGUJElcVsF1Ds91rDLIY/14nTN3pv3ty7Rb/XodmfR0wb5eDHrWOGwOvXPaeL0fCBytrygbra9pHKvnHhx6ziDz4cihmDl6deBQ7OzFgfMJ/3PXwAIu8usjDDd+XOMKuNaPAyP+L2IO16MH1ouPMFwFex+O/ErJr0Nr18SDY6cTJY2D21Q61cF7ZCLo9/hTy+6b33A0qR/L9sB0Wnwp8A4l23Hl9vPFbkrOj2PqzYN/inPuT7JMXp6tLeIy7H+3lPgDHW4dF+QhtTsAAAAASUVORK5CYII=" class="card-img-top" alt="An eigth note">
-                        <div class="card-body">
-                            <h5 class="card-title">Music</h5>
-                            <p class="card-text">I really enjoy both listening and playing music.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-3">
-                    <div class="card" style="width: 18rem;" id="hobby-card-3">
-                        <img src="https://images.pexels.com/photos/276452/pexels-photo-276452.jpeg" class="card-img-top" alt="Picture of a computer screen with code">
-                        <div class="card-body">
-                            <h5 class="card-title">Coding</h5>
-                            <p class="card-text">I am really interested in coding and the things it can do.</p>
-                        </div>
-                    </div>
-                </div> -->
-            </div>
-        <!-- </div> -->
-        <!-- </ul> -->
-      </form>
-      
-    </div>
+
+      <div class="container">
+        <!-- THE REST OF YOUR HTML CODE GOES HERE -->
+        <table style="border-collapse: separate; border-spacing:20px 0;">
+            <tr>
+                <th>Name</th>
+                <th>Instructions</th>
+            </tr>
+            <% data.forEach(function(item) {%>
+                <tr>
+                    <td><%= item.name %></td>
+                    <td><%= item.instructions %></td>
+                </tr>
+            <% }); %>
+        </table>
+      </div>
+
 </main>
 
-
-<%- include ('../partials/footer') %>
