@@ -166,6 +166,47 @@ app.post("/login", (req, res) => {
 
 });
 
+app.post('/addFriend', (req, res) => {
+  let friend = req.body.friendID;
+  let user = req.body.userID;
+
+  let addForward = `INSERT INTO friends (user_id, friend_id) VALUES ('${user}', '${friend}');`;
+  let addReverse = `INSERT INTO friends (user_id, friend_id) VALUES ('${friend}', '${user}');`;
+  let check = `SELECT * FROM users WHERE user_id = '${friend}';`;
+
+  db.any(check)
+  .then((checkResult) => {
+    // This checks if any rows were returned
+    if(checkResult.length > 0)
+    {
+      // Adds to friends table
+      db.task('addFriend', (task) => {
+        return task.batch([task.any(addForward), task.any(addReverse)]);
+      })
+      .then((data) => {
+        res.render("partials/message", {
+          message: 'Friend added successfully.'
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    } 
+    // This case means that there are not any users that match the friend use id
+    else
+    {
+      res.render("partials/message", {
+        message : 'Cannot add friend, user ID does not exist.',
+        error : true
+      });
+    }
+  })
+  .catch( (err) => {
+    console.log(err);
+  });
+});
+
+
   app.get('/welcome', (req, res) => {
     res.json({status: 'success', message: 'Welcome!'});
   //   const options = {
