@@ -234,6 +234,7 @@ app.post('/addFriend', (req, res) => {
 //    diffVar = intermediate
 // else:
 //    diffVar = advanced
+
 app.get('/workouts',(req, res) => {
   const options = {
     method: 'GET',
@@ -252,6 +253,11 @@ app.get('/workouts',(req, res) => {
     console.error(error);
   });
 });
+let sweats = 0;
+app.post('/workouts', (req, res) => {
+  let sweats = 10
+ res.render('pages/workouts', {data: response.data})
+})
 
 
   

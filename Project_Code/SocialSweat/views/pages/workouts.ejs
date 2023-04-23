@@ -1,23 +1,38 @@
 <!-- Currently displays one workout given parameters, do we want to display multiple workouts?
 Needs css to look better
 Working on formatting, more in the middle of the page, smaller, easier to read -->
+<%- include ('../partials/header') %>
 <main>
-
-      <div class="container">
+    <div class="container">
         <!-- THE REST OF YOUR HTML CODE GOES HERE -->
-        <table style="border-collapse: separate; border-spacing:20px 0;">
-            <tr>
-                <th>Name</th>
-                <th>Instructions</th>
-            </tr>
-            <% data.forEach(function(item) {%>
-                <tr>
-                    <td><%= item.name %></td>
-                    <td><%= item.instructions %></td>
+        <form action="/workouts" method="POST">
+            <table style="border: 1px solid black; border-collapse: separate; border-spacing:20px 0; width: 50%; float: left"> Featured Workout
+                <tr style="border: 1px solid black;">
+                    <th style="border: 1px solid black;">Name</th>
+                    <th style="border: 1px solid black;">Instructions</th>
                 </tr>
-            <% }); %>
-        </table>
-      </div>
-
+                <% data.forEach(function(item) {%>
+                    <tr style="border: 1px solid black;">
+                        <td style="border: 1px solid black;"><%= item.name %></td>
+                        <td style="border: 1px solid black;"><%= item.instructions %></td>
+                    </tr>
+                <% }); %>
+            </table>
+            <table style="border: 1px solid black; border-collapse: separate; border-spacing:20px 0; width: 50%;"> Workout Shop
+                <tr style="border: 1px solid black;">
+                    <th style="border: 1px solid black;">Name</th>
+                    <th style="border: 1px solid black;">Instructions</th>
+                </tr>
+                <% data.forEach(function(item) {%>
+                    <tr style="border: 1px solid black;">
+                        <td style="border: 1px solid black;"><%= item.name %></td>
+                        <td style="border: 1px solid black;"><%= item.instructions %></td>
+                    </tr>
+                <% }); %>
+            </table>
+            <button type="submit" value="Submit" class="btn btn-primary">Mark Complete</button>
+            <button type="button">Add to Calendar</button>
+        </form> 
+    </div>
 </main>
-
+<%- include ('../partials/footer') %>
