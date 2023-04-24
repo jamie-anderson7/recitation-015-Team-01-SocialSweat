@@ -227,36 +227,36 @@ app.post('/addFriend', (req, res) => {
  });
 
 // EXTERNAL API - WORKOUT SHOP
-//Eventual Goal:
-// if sweats <= 100:
-//    diffVar = beginner
-// else if 100 < sweats <= 200:
-//    diffVar = intermediate
-// else:
-//    diffVar = advanced
+//Figure out how to make workout level update on button press
 
+let sweats = 180;
+let diffVar = 'beginner';
+if (sweats >= 100) {
+  diffVar = 'intermediate';
+} else if (sweats >= 200) {
+  diffVar = 'expert';
+} 
 app.get('/workouts',(req, res) => {
   const options = {
     method: 'GET',
     url: 'https://exercises-by-api-ninjas.p.rapidapi.com/v1/exercises',
-    params: {difficulty: 'beginner'},
+    params: {difficulty: diffVar},
     headers: {
       'X-RapidAPI-Key': 'd118bffb72mshefac1d32ada5f14p1523e5jsnc3415735b0dc',
       'X-RapidAPI-Host': 'exercises-by-api-ninjas.p.rapidapi.com'
     }
   };/* Deleted a 'g' here because it caused a syntax error */
-
   axios.request(options).then(function (response) {
     console.log(response.data)
-    res.render('pages/workouts', {data: response.data})
+    res.render('pages/workouts', {data: response.data, sweats: sweats, diffVar: diffVar})
   }).catch(function (error) {
     console.error(error);
   });
 });
-let sweats = 0;
+
 app.post('/workouts', (req, res) => {
-  let sweats = 10
- res.render('pages/workouts', {data: response.data})
+  sweats = sweats + 10
+ res.redirect('/workouts')
 })
 
 
