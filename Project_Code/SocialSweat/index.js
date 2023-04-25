@@ -273,6 +273,10 @@ app.get("/calendar", (req, res) => {
   res.render("pages/calendar")
 });
 
-  
+//logout
+app.get("/logout", (req, res) => {
+  req.session.destroy();
+  res.render("pages/login");
+});
 
   module.exports = app.listen(3000);
