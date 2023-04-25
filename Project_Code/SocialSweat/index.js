@@ -57,6 +57,12 @@ app.use(
   })
 );
 
+
+app.get("/", (req, res) => {
+  res.render("pages/login")
+});
+
+
 // Register
 
 app.get("/register", (req, res) => {
@@ -106,11 +112,21 @@ app.post("/register", async (req, res) => {
   });
 });
 
+//LeaderBoard
+app.get('/leaderboard', (req, res) => {
+  res.render('pages/leaderboard.ejs');
+});
 
+//Home
+app.get('/home', (req, res) => {
+  res.render('pages/home.ejs');
+});
+
+//
 
 // Login Routes
 app.get("/login", (req, res) => {
-  res.render("pages/login");
+  res.render("pages/login.ejs");
 });
 
 app.post("/login", (req, res) => {
@@ -120,24 +136,24 @@ app.post("/login", (req, res) => {
 
   const query = `SELECT * FROM users WHERE users.username = '${req.body.username}';`;
   db.one(query)
-  .then( /*commented out async here because it caused an error */(user) => {
-    // if(user == '')
-    // {
-    //   res.redirect("/register");
-    // }
+  .then( async (user) => {
+    if(user == '')
+    {
+      res.redirect("/register");
+    }
     
     // check if password from request matches with password in DB
 
     //For the purposes of lab 11 I am commenting this out
-    //const match = await bcrypt.compare(req.body.password, user.password);
+    const match = await bcrypt.compare(req.body.password, user.password);
 
     // This is also changed from if(match === true){}
-    if(user.password == req.body.password){
+    if(match === true){
       //save user details in session like in lab 8
       
       // Commented out because there is no discover page
-      // req.session.user = user;
-      // req.session.save();
+      req.session.user = user;
+      req.session.save();
       // res.redirect("/discover");
       res.status(200).json({
         message: 'Success'
@@ -155,6 +171,47 @@ app.post("/login", (req, res) => {
   });
 
 });
+
+app.post('/addFriend', (req, res) => {
+  let friend = req.body.friendID;
+  let user = req.session.user.user_id;
+
+  let addForward = `INSERT INTO friends (user_id, friend_id) VALUES ('${user}', '${friend}');`;
+  let addReverse = `INSERT INTO friends (user_id, friend_id) VALUES ('${friend}', '${user}');`;
+  let check = `SELECT * FROM users WHERE user_id = '${friend}';`;
+
+  db.any(check)
+  .then((checkResult) => {
+    // This checks if any rows were returned
+    if(checkResult.length > 0)
+    {
+      // Adds to friends table
+      db.task('addFriend', (task) => {
+        return task.batch([task.any(addForward), task.any(addReverse)]);
+      })
+      .then((data) => {
+        res.render("partials/message", {
+          message: 'Friend added successfully.'
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    } 
+    // This case means that there are not any users that match the friend use id
+    else
+    {
+      res.render("partials/message", {
+        message : 'Cannot add friend, user ID does not exist.',
+        error : true
+      });
+    }
+  })
+  .catch( (err) => {
+    console.log(err);
+  });
+});
+
 
   app.get('/welcome', (req, res) => {
     res.json({status: 'success', message: 'Welcome!'});
@@ -176,26 +233,41 @@ app.post("/login", (req, res) => {
  });
 
 // EXTERNAL API - WORKOUT SHOP
+//Figure out how to make workout level update on button press
 
+let sweats = 180;
+let diffVar = 'beginner';
+if (sweats >= 100) {
+  diffVar = 'intermediate';
+} else if (sweats >= 200) {
+  diffVar = 'expert';
+} 
 app.get('/workouts',(req, res) => {
   const options = {
     method: 'GET',
     url: 'https://exercises-by-api-ninjas.p.rapidapi.com/v1/exercises',
-    params: {muscle: 'calves'},
+    params: {difficulty: diffVar},
     headers: {
       'X-RapidAPI-Key': 'd118bffb72mshefac1d32ada5f14p1523e5jsnc3415735b0dc',
       'X-RapidAPI-Host': 'exercises-by-api-ninjas.p.rapidapi.com'
     }
   };/* Deleted a 'g' here because it caused a syntax error */
-
   axios.request(options).then(function (response) {
     console.log(response.data)
-    res.render('pages/workouts', {data: response.data})
+    res.render('pages/workouts', {data: response.data, sweats: sweats, diffVar: diffVar})
   }).catch(function (error) {
     console.error(error);
   });
 });
 
+app.post('/workouts', (req, res) => {
+  sweats = sweats + 10
+ res.redirect('/workouts')
+})
+
+app.get("/calendar", (req, res) => {
+  res.render("pages/calendar")
+});
 
   
 

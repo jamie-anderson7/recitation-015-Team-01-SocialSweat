@@ -1,62 +1,104 @@
-<%- include ('../partials/head') %>
+<%- include ('../partials/header') %>
 
 <main>
   <div class="container">
     <!-- THE REST OF YOUR HTML CODE GOES HERE -->
-    <div style="width: 70vw; float:left; height:80vh; background:gray; margin:10px">
-        First box
+    <div class="container">
+      <div class="row mt-5">
+        <div class="col-md-8 left-col">
+          <div class="left-div" style="background:lightgrey">
+            <!-- content for the left div goes here -->
+            Anything Here
+          </div>
         </div>
-    <div id="wrapper" style="width: 20vw; float:left; height:80vh;">
-        <div style="width: 20vw; float:top; height:53.5vh; background:gray; margin:10px">
-            Second box
-        </div>
-        <div style="width: 20vw; float:bottom; height:25vh; background:gray; margin:10px">
-            Third box
-        </div>
-    </div>
-    <div style="width:30%; float:left; background:lightgrey; margin:10px">
-        <table class="table" id="Ranking">
-            <thead>
+        <div class="col-md-4">
+          <div class="right-div" style="background:lightgrey">
+            <!-- content for the right div goes here -->
+            <table class="table" id="Ranking">
+              <thead>
+                  <tr>
+                    <th scope="col">Ranking</th>
+                  </tr>
+              </thead>
+              <thead>
                 <tr>
-                  <th scope="col">Ranking</th>
+                  <th scope="col">#</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Level</th>
+                  <th scope="col">Score</th>
                 </tr>
-            </thead>
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Level</th>
-                <th scope="col">Score</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><!--Names & Level & Score datas from backendDB, this just a example-->
-                <th scope="row">1</th>
-                <td>Person1</td>
-                <td>Expert(over 900)</td>
-                <td>1049</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Person2</td>
-                <td>Advanced(700-800)</td>
-                <td>728</td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>Person3</td>
-                <td>Intermediate(500-600)</td>
-                <td>596</td>
-              </tr>
-              <tr>
-                <th scope="row">4</th>
-                <td>Person4</td>
-                <td>Beginner(100-300)</td>
-                <td>137</td>
-              </tr>
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                <tr><!--Names & Level & Score datas from backendDB, this just a example-->
+                  <th scope="row">1</th>
+                  <td>Person1</td>
+                  <td>Expert(over 900)</td>
+                  <td>1049</td>
+                </tr>
+                <tr>
+                  <th scope="row">2</th>
+                  <td>Person2</td>
+                  <td>Advanced(700-800)</td>
+                  <td>728</td>
+                </tr>
+                <tr>
+                  <th scope="row">3</th>
+                  <td>Person3</td>
+                  <td>Intermediate(500-600)</td>
+                  <td>596</td>
+                </tr>
+                <tr>
+                  <th scope="row">4</th>
+                  <td>Person4</td>
+                  <td>Beginner(100-300)</td>
+                  <td>137</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="bottom-div col-md-12" style="background:lightgrey">
+            <!-- content for the left div goes here -->
+            <table class="table" id="Add Friend">
+              <thead>
+                  <tr>
+                    <th scope="col">Lookup Friend</th>
+                  </tr>
+                  <tr>
+                    <th scope="col">
+                      <form action="/addFriend" method="POST">
+                        <label for="friendID">Friend ID</label>
+                        <input type="text" id="friendID" name="friendID">
+                        
+                        <input type="submit" label="Submit">
+                      </form>
+                    </th>
+                  </tr>
+                  <tr>
+                    <th scope="col">
+                      <p>
+                        Your User ID:
+                        <!-- 
+                          Put ejs code here for when the /leaderboard route is completed
+                          Psuedocode:
+                            Have the /leaderboard route send the user ID
+                            Display the user ID
+                        -->
+                      </p>
+                    </th>
+                  </tr>
+              </thead>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
+    
+    <style>
+      .left-col {
+        padding-right: 1%;
+      }
+    </style>
+    
   </div>
 </main>
 
