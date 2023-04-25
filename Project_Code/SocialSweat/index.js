@@ -136,24 +136,24 @@ app.post("/login", (req, res) => {
 
   const query = `SELECT * FROM users WHERE users.username = '${req.body.username}';`;
   db.one(query)
-  .then( /*commented out async here because it caused an error */(user) => {
-    // if(user == '')
-    // {
-    //   res.redirect("/register");
-    // }
+  .then( async (user) => {
+    if(user == '')
+    {
+      res.redirect("/register");
+    }
     
     // check if password from request matches with password in DB
 
     //For the purposes of lab 11 I am commenting this out
-    //const match = await bcrypt.compare(req.body.password, user.password);
+    const match = await bcrypt.compare(req.body.password, user.password);
 
     // This is also changed from if(match === true){}
-    if(user.password == req.body.password){
+    if(match === true){
       //save user details in session like in lab 8
       
       // Commented out because there is no discover page
-      // req.session.user = user;
-      // req.session.save();
+      req.session.user = user;
+      req.session.save();
       // res.redirect("/discover");
       res.status(200).json({
         message: 'Success'
@@ -174,7 +174,7 @@ app.post("/login", (req, res) => {
 
 app.post('/addFriend', (req, res) => {
   let friend = req.body.friendID;
-  let user = req.body.userID;
+  let user = req.session.user.user_id;
 
   let addForward = `INSERT INTO friends (user_id, friend_id) VALUES ('${user}', '${friend}');`;
   let addReverse = `INSERT INTO friends (user_id, friend_id) VALUES ('${friend}', '${user}');`;
