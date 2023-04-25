@@ -57,6 +57,12 @@ app.use(
   })
 );
 
+
+app.get("/", (req, res) => {
+  res.render("pages/login")
+});
+
+
 // Register
 
 app.get("/register", (req, res) => {
@@ -259,6 +265,9 @@ app.post('/workouts', (req, res) => {
  res.redirect('/workouts')
 })
 
+app.get("/calendar", (req, res) => {
+  res.render("pages/calendar")
+});
 
   
 
