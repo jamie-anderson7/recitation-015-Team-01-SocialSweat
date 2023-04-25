@@ -129,7 +129,7 @@ app.get("/login", (req, res) => {
   res.render("pages/login.ejs");
 });
 
-app.post("/login", (req, res) => {
+app.post("/login", async (req, res) => {
   const InputUser = req.body.username;
   const InputPass = req.body.password;
   
@@ -155,15 +155,19 @@ app.post("/login", (req, res) => {
       req.session.user = user;
       req.session.save();
       // res.redirect("/discover");
+      res.redirect('/home');
       res.status(200).json({
         message: 'Success'
       });
+  
     }
     else{
       // res.render("partials/message", {
       //   message : 'Incorrect username or password',
       //   error : true
       // });
+      // console.log('Incorrect username or password.');
+      res.redirect('/login');
       res.status(200).json({
         message: 'Incorrect username or password'
       });
