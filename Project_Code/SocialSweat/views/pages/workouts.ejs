@@ -3,6 +3,7 @@ Needs css to look better
 Working on formatting, more in the middle of the page, smaller, easier to read -->
 <%- include ('../partials/header') %>
 
+
     <main>
         <div class="container">
             <!-- THE REST OF YOUR HTML CODE GOES HERE -->
@@ -10,7 +11,6 @@ Working on formatting, more in the middle of the page, smaller, easier to read -
             <body>
                 <p style="float: right">Sweats:
                     <%= sweats%>
-                        <%= diffVar%>
                 </p>
 
                 <form action="/workouts" method="POST">
@@ -63,6 +63,7 @@ Working on formatting, more in the middle of the page, smaller, easier to read -
                     <caption>
                         Featured Workouts
                     </caption>
+
                     <tr style="border: 1px solid black;">
                         <th style="border: 1px solid black;">Name</th>
                         <th style="border: 1px solid black;">Instructions</th>
