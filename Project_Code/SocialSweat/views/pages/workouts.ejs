@@ -2,32 +2,88 @@
 Needs css to look better
 Working on formatting, more in the middle of the page, smaller, easier to read -->
 <%- include ('../partials/header') %>
-<main>
-    <div class="container">
-        <!-- THE REST OF YOUR HTML CODE GOES HERE -->
-        <body>
-           <p style="float: right">Sweats:
-                <%= sweats%>
 
-           </p>
-        </body>
-        <form action="/workouts" method="POST">
-            <table style="border: 1px solid black; border-collapse: separate; border-spacing:20px 0; width: 50%; float: left"> 
-                <!-- Figure out how to display on top of table -->
-                <caption>
-                    Featured Workouts
-                </caption>
-                <tr style="border: 1px solid black;">
-                    <th style="border: 1px solid black;">Name</th>
-                    <th style="border: 1px solid black;">Instructions</th>
-                </tr>
-                <% data.forEach(function(item) {%>
+
+    <main>
+        <div class="container">
+            <!-- THE REST OF YOUR HTML CODE GOES HERE -->
+
+            <body>
+                <p style="float: right">Sweats:
+                    <%= sweats%>
+                </p>
+
+                <form action="/workouts" method="POST">
+
+                    <div class="left-column">
+                        <% data.forEach(function(item) {%>
+                            <div class="card" style="width: 18rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <%= item.name %>
+                                    </h5>
+                                    <p class="card-text">
+                                        <%= item.instructions %>
+                                    </p>
+                                    <!-- <a href="#" class="card-link">Card link</a>
+                  <a href="#" class="card-link">Another link</a> -->
+                                </div>
+                            </div>
+                            <% }); %>
+                    </div>
+
+                    <div class="middle-column">
+
+
+                    </div>
+
+                    <div class="right-column">
+                        <% data.forEach(function(item) {%>
+                            <div class="card" style="width: 18rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <%= item.name %>
+                                    </h5>
+                                    <p class="card-text">
+                                        <%= item.instructions %>
+                                    </p>
+                                    <!-- <a href="#" class="card-link">Card link</a>
+                                <a href="#" class="card-link">Another link</a> -->
+                                </div>
+                            </div>
+                            <% }); %>
+                    </div>
+
+                </form>
+            </body>
+            <!-- <form action="/workouts" method="POST">
+                <table
+                    style="border: 1px solid black; border-collapse: separate; border-spacing:20px 0; width: 50%; float: left">
+                    Figure out how to display on top of table
+                    <caption>
+                        Featured Workouts
+                    </caption>
+
                     <tr style="border: 1px solid black;">
+                        <th style="border: 1px solid black;">Name</th>
+                        <th style="border: 1px solid black;">Instructions</th>
+                    </tr>
+                    <% data.forEach(function(item) {%>
+                        <tr style="border: 1px solid black;">
                         <td style="border: 1px solid black;"><%= item.name %></td>
                         <td style="border: 1px solid black;"><%= item.instructions %></td>
                     </tr> 
-                    <!-- Implement cards here -->
-                <% }); %>
+                        <div class="card" style="width: 18rem;">
+                        <div class="card-body">
+                          <h5 class="card-title"><%= item.name %></h5>
+                          <p class="card-text"><%= item.instructions %></p>
+                          <a href="#" class="card-link">Card link</a>
+                          <a href="#" class="card-link">Another link</a>
+        </div>
+        </div>
+
+        Implement cards here
+        <% }); %>
             </table>
             <table style="border: 1px solid black; border-collapse: separate; border-spacing:20px 0; width: 50%;">
                 <caption>
@@ -42,12 +98,20 @@ Working on formatting, more in the middle of the page, smaller, easier to read -
                         <td style="border: 1px solid black;"><%= item.name %></td>
                         <td style="border: 1px solid black;"><%= item.instructions %></td>
                     </tr>
-                <% }); %>
+                    <div class="card" style="width: 18rem;">
+                        <div class="card-body">
+                          <h5 class="card-title"><%= item.name %></h5>
+                          <p class="card-text"><%= item.instructions %></p>
+                          <a href="#" class="card-link">Card link</a>
+                          <a href="#" class="card-link">Another link</a>
+                    </div>
+                    </div>
+                    <% }); %>
             </table>
             <button type="submit" value="Submit" class="btn btn-primary">Mark Complete</button>
-            <button type="button">Add to Calendar</button> <br/> <br/> <br/>
-            <!-- add css property to add padding -->
-        </form> 
-    </div>
-</main>
-<%- include ('../partials/footer') %>
+            <button type="button">Add to Calendar</button> <br /> <br /> <br />
+            add css property to add padding
+            </form> -->
+        </div>
+    </main>
+    <%- include ('../partials/footer') %>
