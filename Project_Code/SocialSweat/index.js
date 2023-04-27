@@ -14,6 +14,7 @@ const path = require('path');
 console.log(path.join(__dirname,'/recources/img'));
 app.use(express.static(path.join(__dirname,'/recources/img')));
 
+
 // *****************************************************
 // <!-- Section 2 : Connect to DB -->
 // *****************************************************

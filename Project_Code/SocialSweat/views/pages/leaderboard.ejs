@@ -1,137 +1,194 @@
+<script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  const myModal = document.getElementById('myModal');
+  const myInput = document.getElementById('myInput');
+
+  myModal.addEventListener('shown.bs.modal', () => {
+    myInput.focus();
+  });
+</script>
+
 <%- include ('../partials/header') %>
 
-<main>
-  <div class="container">
-    <!-- THE REST OF YOUR HTML CODE GOES HERE -->
-    <div class="row mt-5">
-      <div class="col-md-8 left-col" style="margin-bottom: 40px; margin-right: 50px;">
-        <div class="left-div" style="background:lightgrey; padding: 20px; margin-bottom: 30px;">
-          <!-- content for the left div goes here -->
-          <div class="title-div" style="text-align: center; margin-bottom: 30px;">
-            <h2>Feed</h2>
-          </div>
-          <div class="row" style="margin-right: 0px; margin-left: 0px;">
-            <div class="col-md-6 mb-3">
-              <div class="box" style="width:100%; background: white; border: 1px solid black; padding: 10px;">
-                <img src="img1.jpg" alt="image1" style="width:100%">
-                <div class="row mt-3">
-                  <div class="col-md-6">Friend Name:</div>
-                  <div class="col-md-6">Workout Name:</div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6 mb-3">
-              <div class="box" style="width:100%; background: white; border: 1px solid black; padding: 10px;">
-                <img src="img1.jpg" alt="image1" style="width:100%">
-                <div class="row mt-3">
-                  <div class="col-md-6">Friend Name:</div>
-                  <div class="col-md-6">Workout Name:</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row" style="margin-right: 0px; margin-left: 0px;">
-            <div class="col-md-6 mb-3">
-              <div class="box" style="background: white; border: 1px solid black; padding: 10px;">
-                <img src="img1.jpg" alt="image1" style="width:100%">
-                <div class="row mt-3">
-                  <div class="col-md-6">Friend Name:</div>
-                  <div class="col-md-6">Workout Name:</div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6 mb-3">
-              <div class="box" style="background: white; border: 1px solid black; padding: 10px;">
-                <img src="img1.jpg" alt="image1" style="width:100%">
-                <div class="row mt-3">
-                  <div class="col-md-6">Friend Name:</div>
-                  <div class="col-md-6">Workout Name:</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row" style="margin-right: 0px; margin-left: 0px;">
-            <div class="col-md-6 mb-3">
-              <div class="box" style="background: white; border: 1px solid black; padding: 10px;">
-                <img src="img1.jpg" alt="image1" style="width:100%">
-                <div class="row mt-3">
-                  <div class="col-md-6">Friend Name:</div>
-                  <div class="col-md-6">Workout Name:</div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6 mb-3">
-              <div class="box" style="background: white; border: 1px solid black; padding: 10px;">
-                <img src="img1.jpg" alt="image1" style="width:100%">
-                <div class="row mt-3">
-                  <div class="col-md-6">Friend Name:</div>
-                  <div class="col-md-6">Workout Name:</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3 right-col">
-        <div class="row mb-5">
-          <div class="col-md-12" style="background:lightgrey">
-            <!-- content for the top section goes here -->
+  <main>
+    <div class="container">
+      <!-- THE REST OF YOUR HTML CODE GOES HERE -->
+      <div class="row mt-5">
+        <div class="col-md-8 left-col" style="margin-bottom: 40px; margin-right: 50px;">
+          <div class="left-div" style="background:lightgrey; padding: 20px; margin-bottom: 30px;">
+            <!-- content for the left div goes here -->
             <div class="title-div" style="text-align: center; margin-bottom: 30px;">
-              <h2>Leaderboard</h2>
+              <h2>Feed</h2>
             </div>
-            <div class="row justify-content-center" style="margin-right: 0px; margin-left: 0px;">
-              <div class="col-md-12 mx-auto">
-                <div class="box" style="background: white; border: 1px solid black; padding: 10px; margin-bottom: 20px;">
+            <div class="row" style="margin-right: 0px; margin-left: 0px;">
+              <div class="col-md-6 mb-3">
+                <div class="box" style="width:100%; background: white; border: 1px solid black; padding: 10px;">
+                  <img src="img1.jpg" alt="image1" style="width:100%">
                   <div class="row mt-3">
-                    <div class="col-md-6 text-center">Friend Name:</div>
-                    <div class="col-md-6 text-center">Workout Name:</div>
+                    <div class="col-md-6">Friend Name:</div>
+                    <div class="col-md-6">Workout Name:</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <div class="box" style="width:100%; background: white; border: 1px solid black; padding: 10px;">
+                  <img src="img1.jpg" alt="image1" style="width:100%">
+                  <div class="row mt-3">
+                    <div class="col-md-6">Friend Name:</div>
+                    <div class="col-md-6">Workout Name:</div>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="row justify-content-center" style="margin-right: 0px; margin-left: 0px;">
-              <div class="col-md-12 mx-auto">
-                <div class="box" style="background: white; border: 1px solid black; padding: 10px; margin-bottom: 20px;">
+            <div class="row" style="margin-right: 0px; margin-left: 0px;">
+              <div class="col-md-6 mb-3">
+                <div class="box" style="background: white; border: 1px solid black; padding: 10px;">
+                  <img src="img1.jpg" alt="image1" style="width:100%">
                   <div class="row mt-3">
-                    <div class="col-md-6 text-center">Friend Name:</div>
-                    <div class="col-md-6 text-center">Workout Name:</div>
+                    <div class="col-md-6">Friend Name:</div>
+                    <div class="col-md-6">Workout Name:</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <div class="box" style="background: white; border: 1px solid black; padding: 10px;">
+                  <img src="img1.jpg" alt="image1" style="width:100%">
+                  <div class="row mt-3">
+                    <div class="col-md-6">Friend Name:</div>
+                    <div class="col-md-6">Workout Name:</div>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="row justify-content-center" style="margin-right: 0px; margin-left: 0px;">
-              <div class="col-md-12 mx-auto">
-                <div class="box" style="background: white; border: 1px solid black; padding: 10px; margin-bottom: 20px;">
+            <div class="row" style="margin-right: 0px; margin-left: 0px;">
+              <div class="col-md-6 mb-3">
+                <div class="box" style="background: white; border: 1px solid black; padding: 10px;">
+                  <img src="img1.jpg" alt="image1" style="width:100%">
                   <div class="row mt-3">
-                    <div class="col-md-6 text-center">Friend Name:</div>
-                    <div class="col-md-6 text-center">Workout Name:</div>
+                    <div class="col-md-6">Friend Name:</div>
+                    <div class="col-md-6">Workout Name:</div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="row justify-content-center" style="margin-right: 0px; margin-left: 0px;">
-              <div class="col-md-12 mx-auto">
-                <div class="box" style="background: white; border: 1px solid black; padding: 10px; margin-bottom: 20px;">
+              <div class="col-md-6 mb-3">
+                <div class="box" style="background: white; border: 1px solid black; padding: 10px;">
+                  <img src="img1.jpg" alt="image1" style="width:100%">
                   <div class="row mt-3">
-                    <div class="col-md-6 text-center">Friend Name:</div>
-                    <div class="col-md-6 text-center">Workout Name:</div>
+                    <div class="col-md-6">Friend Name:</div>
+                    <div class="col-md-6">Workout Name:</div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-12" style="background:lightgrey">
-            <!-- content for the top section goes here -->
-            <div class="title-div" style="text-align: center; margin-bottom: 30px;">
-              <h4>Find Friends</h4>
+        <div class="col-md-3 right-col">
+          <div class="row mb-5">
+            <div class="col-md-12" style="background:lightgrey">
+              <!-- content for the top section goes here -->
+              <div class="title-div" style="text-align: center; margin-bottom: 30px;">
+                <h2>Leaderboard</h2>
+              </div>
+              <div class="row justify-content-center" style="margin-right: 0px; margin-left: 0px;">
+                <div class="col-md-12 mx-auto">
+                  <div class="box"
+                    style="background: white; border: 1px solid black; padding: 10px; margin-bottom: 20px;">
+                    <div class="row mt-3">
+                      <div class="col-md-6 text-center">Friend Name:</div>
+                      <div class="col-md-6 text-center">Workout Name:</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row justify-content-center" style="margin-right: 0px; margin-left: 0px;">
+                <div class="col-md-12 mx-auto">
+                  <div class="box"
+                    style="background: white; border: 1px solid black; padding: 10px; margin-bottom: 20px;">
+                    <div class="row mt-3">
+                      <div class="col-md-6 text-center">Friend Name:</div>
+                      <div class="col-md-6 text-center">Workout Name:</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row justify-content-center" style="margin-right: 0px; margin-left: 0px;">
+                <div class="col-md-12 mx-auto">
+                  <div class="box"
+                    style="background: white; border: 1px solid black; padding: 10px; margin-bottom: 20px;">
+                    <div class="row mt-3">
+                      <div class="col-md-6 text-center">Friend Name:</div>
+                      <div class="col-md-6 text-center">Workout Name:</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row justify-content-center" style="margin-right: 0px; margin-left: 0px;">
+                <div class="col-md-12 mx-auto">
+                  <div class="box"
+                    style="background: white; border: 1px solid black; padding: 10px; margin-bottom: 20px;">
+                    <div class="row mt-3">
+                      <div class="col-md-6 text-center">Friend Name:</div>
+                      <div class="col-md-6 text-center">Workout Name:</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12" style="background:lightgrey">
+              <!-- content for the bottom section goes here -->
+              <div class="title-div" style="text-align: center; margin-bottom: 30px;">
+                <h4>Find Friends</h4>
+              </div>
+              <div class="d-flex justify-content-center mb-3">
+                <button type="button" class="btn btn-secondary white-btn btn-custome-width" data-toggle="modal" data-target="#myModal">
+                  Recommendations
+                </button>
+                <div class="modal" tabindex="-1" id="myModal">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title">Modal title</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <p>Modal body text goes here.</p>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="d-flex justify-content-center mb-3">
+                <button type="button" class="btn btn-secondary white-btn btn-custome-width" data-toggle="modal" data-target="#myModal2">
+                  Find Friend
+                </button>
+              </div>
+              <div class="d-flex justify-content-center mb-3">
+                User ID:
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</main>
+  </main>
 
-<%- include ('../partials/footer') %>
+
+  <style>
+    .white-btn {
+      background-color: white;
+      color: black;
+    }
+    
+    .btn-custome-width {
+      width: 150px;
+    }
+  </style>
+
+  <%- include ('../partials/footer') %>
