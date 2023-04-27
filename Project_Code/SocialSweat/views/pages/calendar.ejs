@@ -1,4 +1,9 @@
-const CALENDAR_DAYS = [
+<%- include ('../partials/header') %>
+
+
+<main>
+    <script>
+        const CALENDAR_DAYS = [
     'Sunday',
     'Monday',
     'Tuesday',
@@ -34,6 +39,7 @@ const CALENDAR_DAYS = [
     const title = document.createElement('div');
     title.className = 'h6 text-center position-relative py-2';
     title.innerHTML = day;
+    
   
     card.appendChild(title);// @TODO: Add the title element to the card.
     // Use appendChild()
@@ -65,11 +71,11 @@ const CALENDAR_DAYS = [
   }
   
   
-  const CALENDAR_EVENTS = [
+  const CALENDAR_WORKOUTS = [
     {
         workout: 'Bench Press',
         day: 'Monday',
-        time: '9:30',
+        time: '09:30',
     },
     {
         workout: 'Squats',
@@ -81,7 +87,7 @@ const CALENDAR_DAYS = [
   
   function updateDOM() {
   
-    const events = CALENDAR_EVENTS;
+    const events = CALENDAR_WORKOUTS;
    
     events.forEach((event, id) => {
       // First, let's try to update the event if it already exists.
@@ -93,7 +99,7 @@ const CALENDAR_DAYS = [
       // let msg = `Welcome ${name}`;
       let eventElement = document.querySelector(`#event-${id}`);
    
-      // if event is undefined, i.e. it doesn't exist in the CALENDAR_EVENTS array, make a new one.
+      // if event is undefined, i.e. it doesn't exist in the CALENDAR_WORKOUTS array, make a new one.
       if (eventElement === null) {
         eventElement = document.createElement("div");// @TODO: create a new div element. Use document.createElement().
         // Adding classes to the <div> element.
@@ -118,12 +124,13 @@ const CALENDAR_DAYS = [
    
       // Add the Event Name
       const title = eventElement.querySelector('div.event-title');
-      title.innerHTML = event.workout; // event here is an input parameter to the function
+      title.innerHTML = "<strong>" + event.workout + "</strong>" + "<br>" + event.time;
+ // event here is an input parameter to the function
    
       // Add a tooltip with more information on hover
       // @TODO: you will add code here when you are working on for Part B.
       eventElement.setAttribute("data-bs-toggle", "tooltip");
-      eventElement.setAttribute("data-bs-title", `it is ${event.workout} time at ${event.time}!`);
+      eventElement.setAttribute("data-bs-title", `Get ready for ${event.workout} at ${event.time}!`);
    
       // @TODO: On clicking the event div, it should open the modal with the fields pre-populated.
       // Replace <> with the triggering action.
@@ -158,13 +165,14 @@ const CALENDAR_DAYS = [
         // in javascript so we can update the text suitably
         const submitButton = document.querySelector('#submit_button');
         const modalTitle = document.querySelector('.modal-title');
+        const deleteButton = document.querySelector('#delete_button');
       
-        // Check if the event exists in the CALENDAR_EVENTS by using `id`
+        // Check if the event exists in the CALENDAR_WORKOUTS by using `id`
         // Note that on the first try, when you attempt to access an event that does not exist
         // an event will be added to the list. This is expected.
-        let event = CALENDAR_EVENTS[id];
+        let event = CALENDAR_WORKOUTS[id];
       
-        // If event is undefined, i.e it does not exist in the CALENDAR_EVENTS, then we create a new event.
+        // If event is undefined, i.e it does not exist in the CALENDAR_WORKOUTS, then we create a new event.
         // Else, we load the current event into the modal.
         if (event === undefined) {
           // @TODO: Update the innerHTML for modalTitle and submitButton
@@ -178,36 +186,45 @@ const CALENDAR_DAYS = [
             time: '',
           };
       
-          // Allocate a new event id. Note that nothing is inserted into the CALENDAR_EVENTS yet.
-          // @TODO: Set the id to be the length of the CALENDAR_EVENTS because we are adding a new element
-         id = CALENDAR_EVENTS.length; 
+          // Allocate a new event id. Note that nothing is inserted into the CALENDAR_WORKOUTS yet.
+          // @TODO: Set the id to be the length of the CALENDAR_WORKOUTS because we are adding a new element
+         id = CALENDAR_WORKOUTS.length; 
         }
           else {
           // We will default to "Update Event" as the text for the title and the submit button
           modalTitle.innerHTML = 'Update Event';
           submitButton.innerHTML = 'Update Event';
         }
+
+        if(submitButton.innerHTML == 'Create Event'){ //specify the condition. replace the <> with a strings
+        deleteButton.setAttribute('hidden', 'hidden');
+    }
+    else{
+        deleteButton.removeAttribute('hidden');
+    }
       
         // Once the event is fetched/created, populate the modal.
         // @TODO: Update all form fields of the modal with suitable values from the event.
         // Use document.querySelector() to get the form elements.
         // Hint: If it is a new event, the fields in the modal will be empty.
         document.querySelector('#workout').value = event.workout;
-        document.querySelector('#weekday').value = event.weekday;
+        document.querySelector('#weekday').value = event.day;
         document.querySelector('#time').value = event.time;
       
         // Set the "action" event for the form to call the updateEventFromModal
         // when the form is submitted by clicking on the "Creat/Update Event" button
         const form = document.querySelector('#event-modal form');
         form.setAttribute('action', `javascript:updateEventFromModal(${id})`);
+
+        deleteButton.setAttribute("onclick",`javascript:deleteEventFromModal(${id})`);
       
         EVENT_MODAL.show();
       }
   
       function updateEventFromModal(id) {
-        CALENDAR_EVENTS[id] = {
+        CALENDAR_WORKOUTS[id] = {
           workout: document.querySelector('#workout').value, //will eventually be workout select bc of the dropdown
-          day: document.querySelector('#weekday select').value,
+          day: document.querySelector('#weekday').value,
           time: document.querySelector('#time').value,
           // @TODO: Update the json object with values from the remaining fields of the modal
         };
@@ -216,5 +233,74 @@ const CALENDAR_DAYS = [
         updateDOM();
         EVENT_MODAL.hide();
       }
+
+      function deleteEventFromModal(id) {
+            const index = CALENDAR_WORKOUTS.findIndex((event) => event.workout === CALENDAR_WORKOUTS[id].workout);
+            console.log(CALENDAR_WORKOUTS[index].workout);
+            console.log(CALENDAR_WORKOUTS.splice(index, 1));
+            console.log(CALENDAR_WORKOUTS);
+            // Update the dom and hide the event modal
+            updateDOM();
+            EVENT_MODAL.hide();
+        }
   
-  
+      </script>
+    </head>
+    
+    <body onload="initializeContent()">
+      <div class="container">
+          <!-- You may choose another container class of your liking -->
+          <!-- All elements of the webpage will be added within this div -->
+          <div id="calendar" class="row">
+            
+          </div>
+        </div>
+        <div id="event-modal" class="modal" tabindex="-1">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Create Event</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <form>
+                <div class="mb-3" id="workoutDiv">
+                    <label class="form-label">Workout</label>
+                    <input type="text" class="form-control" id="workout" aria-describedby="" required>
+                </div>
+
+                <div class="mb-3" id="weekdayDiv">
+                    <label class="form-label">Weekday</label>
+                    <select class="form-select" id="weekday">
+                      <option>Monday</option>
+                      <option>Tuesday</option>
+                      <option>Wednesday</option>
+                      <option>Thursday</option>
+                      <option>Friday</option>
+                      <option>Saturday</option>
+                      <option>Sunday</option>
+                    </select>
+                  </div>
+              <div class="mb-3" id="timeDiv">
+                              <label class="form-label">Time</label>
+                              <input type="time" class="form-control" id="time" aria-describedby="" required>
+                            </div>
+              
+                <div>
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary" id="submit_button">Create Event</button>
+                  <button type="submit" class="btn btn-danger" id="delete_button" disabled>Delete Event</button>
+                </div>
+              </form>
+              </div>
+              <div class="modal-footer">
+              </div>
+            </div>
+          </div>
+        </div>
+    </body>
+  </div>
+</main>
+
+
+<%- include ('../partials/footer') %>
