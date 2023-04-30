@@ -261,10 +261,16 @@ let diffVar = 'beginner';
 
 app.get('/workouts',(req, res) => {
   let sweatVal = req.session.user.sweats;
+  let diffVar = 'beginner';
+  if (sweatVal >= 100) {
+    diffVar = 'intermediate';
+  } else if (sweatVal >= 200) {
+    diffVar = 'expert';
+  } 
   const options = {
     method: 'GET',
     url: 'https://exercises-by-api-ninjas.p.rapidapi.com/v1/exercises',
-    params: {difficulty: 'expert'},
+    params: {difficulty: diffVar},
     headers: {
       'X-RapidAPI-Key': 'd118bffb72mshefac1d32ada5f14p1523e5jsnc3415735b0dc',
       'X-RapidAPI-Host': 'exercises-by-api-ninjas.p.rapidapi.com'
@@ -285,6 +291,28 @@ app.post('/workouts', (req, res) => {
   db.any(query, [sweatVal, req.session.user.username])
  res.redirect('/workouts')
 })
+// app.put('/workouts', function (req, res) {
+//   let sweatVal = req.session.user.sweats;
+//   sweatVal = sweatVal + 10
+//   const query =
+//   'update users set sweats = $1 where username = $2 returning * ;';
+//   // $1 and $2 will be replaced by req.body.name, req.body.username
+//   db.any(query, [sweatVal, req.session.user.username])
+//     // if query execution succeeds
+//     // send success message
+//     .then(function (data) {
+//       res.status(201).json({
+//         status: 'success',
+//         data: data,
+//         message: 'data updated successfully',
+//       });
+//     })
+//     // if query execution fails
+//     // send error message
+//     .catch(function (err) {
+//       return console.log(err);
+//     });
+// });
 
 app.get("/calendar", (req, res) => {
   res.render("pages/calendar")
