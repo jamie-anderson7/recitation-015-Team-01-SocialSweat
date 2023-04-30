@@ -103,6 +103,8 @@ app.post("/register", async (req, res) => {
         //   status: 200,
         //   message: 'User added successfully.'
         // });
+        req.session.user = user;
+        req.session.save();
         res.status(200).json({
           message: 'User added successfully.'
         });
@@ -121,7 +123,22 @@ app.post("/register", async (req, res) => {
 
 //LeaderBoard
 app.get('/leaderboard', (req, res) => {
-  res.render('pages/leaderboard.ejs');
+  let query = `SELECT users.user_id, sweats, username FROM users
+  INNER JOIN friends
+  ON friends.user_id = '${req.session.user.user_id}' AND users.user_id = friends.friend_id ORDER BY sweats LIMIT 6;`;
+
+  db.any(query)
+  .then(results => {
+    res.render('pages/leaderboard', {
+      friends : results,
+      userID : req.session.user.user_id
+    });
+  })
+  .catch( (err) => {
+    console.log(err);
+    res.redirect("/workouts");
+  });
+  
 });
 
 //Home
@@ -176,6 +193,7 @@ app.post("/login", async (req, res) => {
       //   error : true
       // });
       // console.log('Incorrect username or password.');
+
       res.render('/login');
       res.status(200).json({
         message: 'Incorrect username or password'
@@ -186,6 +204,7 @@ app.post("/login", async (req, res) => {
     console.log(error)
     res.render("pages/register")
   })
+
 
 });
 

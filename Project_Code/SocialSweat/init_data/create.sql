@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS friends (
     user_id INT NOT NULL,
-    firend_id INT NOT NULL
+    friend_id INT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS users_to_workouts (
