@@ -79,41 +79,10 @@ app.post("/register", async (req, res) => {
   const hash = await bcrypt.hash(req.body.password, 10);
 
   // To-DO: Insert username and hashed password into 'users' table
-  let ins = `INSERT INTO users (username, password, sweats) VALUES ('${req.body.username}', '${hash}', 0);`;
-  let check = `SELECT * FROM users WHERE username = '${req.body.username}';`;
-  req.session.sweats = sweats;
-  req.session.save();
-  db.any(check)
+  let ins = `INSERT INTO users (username, password, sweats) VALUES ('${req.body.username}', '${hash}',0);`;
+  db.any(ins)
   .then(data => {
-    if(data.length > 0)
-    {
-      // res.render('pages/register', {
-      //   status: 200,
-      //   message: 'Cannot add, user already exists.'
-      // });
-      res.status(200).json({
-        message: 'Cannot add, user already exists.'
-      });
-    }
-    else
-    {
-      db.any(ins)
-      .then(insResult => {
-        // res.render('pages/login', {
-        //   status: 200,
-        //   message: 'User added successfully.'
-        // });
-        req.session.user = user;
-        req.session.save();
-        res.status(200).json({
-          message: 'User added successfully.'
-        });
-      })
-      .catch( (err) => {
-        console.log(err);
-        res.redirect("/register");
-      });
-    }
+    res.redirect("/login");
   })
   .catch( (err) => {
     console.log(err);
