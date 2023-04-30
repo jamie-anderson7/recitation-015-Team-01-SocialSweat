@@ -81,6 +81,8 @@ app.post("/register", async (req, res) => {
   // To-DO: Insert username and hashed password into 'users' table
   let ins = `INSERT INTO users (username, password, sweats) VALUES ('${req.body.username}', '${hash}', 0);`;
   let check = `SELECT * FROM users WHERE username = '${req.body.username}';`;
+  req.session.sweats = sweats;
+  req.session.save();
   db.any(check)
   .then(data => {
     if(data.length > 0)
@@ -152,16 +154,18 @@ app.get("/login", (req, res) => {
 });
 
 app.post("/login", async (req, res) => {
+
   const InputUser = req.body.username;
   const InputPass = req.body.password;
   
 
   const query = `SELECT * FROM users WHERE users.username = '${req.body.username}';`;
+  
   db.one(query)
   .then( async (user) => {
     if(user == '')
     {
-      res.redirect("/register");
+      res.render('/register');
     }
     
     // check if password from request matches with password in DB
@@ -176,7 +180,11 @@ app.post("/login", async (req, res) => {
       // Commented out because there is no discover page
       req.session.user = user;
       req.session.save();
-      res.redirect(302, '/workouts?message=' + 'Success');
+      // res.redirect("/discover");
+      res.redirect('/workouts');
+      res.status(200).json({
+        message: 'Success'
+      });
   
     }
     else{
@@ -185,16 +193,18 @@ app.post("/login", async (req, res) => {
       //   error : true
       // });
       // console.log('Incorrect username or password.');
-      // res.redirect('/login');
+
+      res.render('/login');
       res.status(200).json({
         message: 'Incorrect username or password'
       });
     }
   })
-  .catch((err) => {
-    console.log(err);
-    res.render("pages/register");
-  });
+  .catch((error) => {
+    console.log(error)
+    res.render("pages/register")
+  })
+
 
 });
 
@@ -261,18 +271,20 @@ app.post('/addFriend', (req, res) => {
 // EXTERNAL API - WORKOUT SHOP
 //Figure out how to make workout level update on button press
 
-let sweats = 180;
+//let sweats = 180;
 let diffVar = 'beginner';
-if (sweats >= 100) {
-  diffVar = 'intermediate';
-} else if (sweats >= 200) {
-  diffVar = 'expert';
-} 
+// if (sweats >= 100) {
+//   diffVar = 'intermediate';
+// } else if (sweats >= 200) {
+//   diffVar = 'expert';
+// } 
+
 app.get('/workouts',(req, res) => {
+  let sweatVal = req.session.user.sweats;
   const options = {
     method: 'GET',
     url: 'https://exercises-by-api-ninjas.p.rapidapi.com/v1/exercises',
-    params: {difficulty: diffVar},
+    params: {difficulty: 'expert'},
     headers: {
       'X-RapidAPI-Key': 'd118bffb72mshefac1d32ada5f14p1523e5jsnc3415735b0dc',
       'X-RapidAPI-Host': 'exercises-by-api-ninjas.p.rapidapi.com'
@@ -280,14 +292,17 @@ app.get('/workouts',(req, res) => {
   };/* Deleted a 'g' here because it caused a syntax error */
   axios.request(options).then(function (response) {
     console.log(response.data)
-    res.render('pages/workouts', {data: response.data, sweats: sweats, diffVar: diffVar})
+    res.render('pages/workouts', {data: response.data, sweats: sweatVal})
   }).catch(function (error) {
     console.error(error);
   });
 });
-
+//sweats doesn't update yet
 app.post('/workouts', (req, res) => {
-  sweats = sweats + 10
+  let sweatVal = req.session.user.sweats;
+  sweatVal = sweatVal + 10
+  let query = 'update users set sweats = $1 where username = $2 returning * ;';
+  db.any(query, [sweatVal, req.session.user.username])
  res.redirect('/workouts')
 })
 
