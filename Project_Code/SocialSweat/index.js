@@ -14,6 +14,11 @@ const path = require('path')
 console.log(path.join(__dirname,'/recources/img'));
 app.use(express.static(path.join(__dirname,'/recources/img')));
 
+// console.log(path.join(__dirname,'/recources/img'));
+// app.use(express.static(path.join(__dirname,'/recources/img')));
+
+//or do this:
+//import home from 'Project_Code\SocialSweat\recources\img\home.png' 
 
 // *****************************************************
 // <!-- Section 2 : Connect to DB -->

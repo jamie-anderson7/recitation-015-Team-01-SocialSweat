@@ -1,0 +1,26 @@
+/* .left-column {
+    width: 30%;
+    float: left;
+}
+
+.middle-column {
+    width: 40%;
+    float: left;
+}
+
+.right-column {
+    width: 30%;
+    float: left;
+} */
+
+.column {
+    float: left;
+    width: 33.33%;
+  }
+  
+  /* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
