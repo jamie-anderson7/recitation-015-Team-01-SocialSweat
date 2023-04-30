@@ -260,28 +260,65 @@ let diffVar = 'beginner';
 // } 
 
 app.get('/workouts',(req, res) => {
-  let sweatVal = req.session.user.sweats;
-  let diffVar = 'beginner';
-  if (sweatVal >= 100) {
-    diffVar = 'intermediate';
-  } else if (sweatVal >= 200) {
-    diffVar = 'expert';
-  } 
-  const options = {
-    method: 'GET',
-    url: 'https://exercises-by-api-ninjas.p.rapidapi.com/v1/exercises',
-    params: {difficulty: diffVar},
-    headers: {
-      'X-RapidAPI-Key': 'd118bffb72mshefac1d32ada5f14p1523e5jsnc3415735b0dc',
-      'X-RapidAPI-Host': 'exercises-by-api-ninjas.p.rapidapi.com'
-    }
-  };/* Deleted a 'g' here because it caused a syntax error */
-  axios.request(options).then(function (response) {
-    console.log(response.data)
-    res.render('pages/workouts', {data: response.data, sweats: sweatVal})
-  }).catch(function (error) {
+  try {
+    let sweatVal = req.session.user.sweats;
+    let diffVar = 'beginner';
+    if (sweatVal >= 100) {
+      diffVar = 'intermediate';
+    } else if (sweatVal >= 200) {
+      diffVar = 'expert';
+    } 
+    const options = {
+      method: 'GET',
+      url: 'https://exercises-by-api-ninjas.p.rapidapi.com/v1/exercises',
+      params: {difficulty: diffVar},
+      headers: {
+        'X-RapidAPI-Key': 'd118bffb72mshefac1d32ada5f14p1523e5jsnc3415735b0dc',
+        'X-RapidAPI-Host': 'exercises-by-api-ninjas.p.rapidapi.com'
+      }
+    };/* Deleted a 'g' here because it caused a syntax error */
+    axios.request(options).then(function (response) {
+      console.log(response.data)
+      res.render('pages/workouts', {data: response.data, sweats: sweatVal})
+    }).catch(function (error) {
+      console.error(error);
+    });
+  } catch (error) {
     console.error(error);
-  });
+    //need message for error
+    res.render("pages/login")
+    // Expected output: ReferenceError: nonExistentFunction is not defined
+    // (Note: the exact output may be browser-dependent)
+  }
+  
+  // if((error) => {
+  //   console.log(error)
+  //   res.render("pages/register")
+  // }) 
+  // // else ({
+  // let sweatVal = req.session.user.sweats;
+  // let diffVar = 'beginner';
+  // if (sweatVal >= 100) {
+  //   diffVar = 'intermediate';
+  // } else if (sweatVal >= 200) {
+  //   diffVar = 'expert';
+  // } 
+  // const options = {
+  //   method: 'GET',
+  //   url: 'https://exercises-by-api-ninjas.p.rapidapi.com/v1/exercises',
+  //   params: {difficulty: diffVar},
+  //   headers: {
+  //     'X-RapidAPI-Key': 'd118bffb72mshefac1d32ada5f14p1523e5jsnc3415735b0dc',
+  //     'X-RapidAPI-Host': 'exercises-by-api-ninjas.p.rapidapi.com'
+  //   }
+  // };/* Deleted a 'g' here because it caused a syntax error */
+  // axios.request(options).then(function (response) {
+  //   console.log(response.data)
+  //   res.render('pages/workouts', {data: response.data, sweats: sweatVal})
+  // }).catch(function (error) {
+  //   console.error(error);
+  // });
+  // // )}
 });
 //sweats doesn't update yet
 app.post('/workouts', (req, res) => {
