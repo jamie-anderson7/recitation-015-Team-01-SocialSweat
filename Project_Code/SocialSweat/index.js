@@ -10,10 +10,19 @@ const session = require('express-session'); // To set the session object. To sto
 const bcrypt = require('bcrypt'); //  To hash passwords
 const axios = require('axios'); // To make HTTP requests from our server. We'll learn more about it in Part B.
 
+
 const path = require('path')
 console.log(path.join(__dirname,'/recources/img'));
 app.use(express.static(path.join(__dirname,'/recources/img')));
+app.use(express.static(__dirname + '/public'));
 
+
+
+// console.log(path.join(__dirname,'/recources/img'));
+// app.use(express.static(path.join(__dirname,'/recources/img')));
+
+//or do this:
+//import home from 'Project_Code\SocialSweat\recources\img\home.png' 
 
 // *****************************************************
 // <!-- Section 2 : Connect to DB -->
