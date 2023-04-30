@@ -172,10 +172,12 @@ app.post("/login", async (req, res) => {
       // });
       // console.log('Incorrect username or password.');
 
-      res.render('/login');
+      res.redirect('/login');
+      //work on getting modal to display, currently just reloads login page
       res.status(200).json({
         message: 'Incorrect username or password'
       });
+      
     }
   })
   .catch((error) => {
