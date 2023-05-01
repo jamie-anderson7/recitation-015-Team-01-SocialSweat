@@ -18,6 +18,7 @@ Working on formatting, more in the middle of the page, smaller, easier to read -
                 <form action="/workouts" method="POST">
                     <div class="row">
                         <div class="col-sm">
+                            <caption>Featured Workout</caption>
                             <% data.forEach(function(item) {%>
                                 <div class="card" style="width: 21rem;">
                                     <div class="card-body">
@@ -35,6 +36,7 @@ Working on formatting, more in the middle of the page, smaller, easier to read -
                                 </div>
                                 <% }); %>
                                 <button type="button">Add to Calendar</button>
+                                <button type="submit" value="Submit" class="btn btn-primary">Mark Complete</button>
                         </div>
 
                         <div class="col-sm">
@@ -56,6 +58,7 @@ Working on formatting, more in the middle of the page, smaller, easier to read -
                         </div>
 
                         <div class="col-sm">
+                            <caption>Workout Shop</caption>
                             <% data.forEach(function(item) {%>
                                 <div class="card" style="width: 21rem;">
                                     <div class="card-body">
@@ -71,12 +74,12 @@ Working on formatting, more in the middle of the page, smaller, easier to read -
                                 </div>
                                 <% }); %>
                                 <button type="button">Add to Calendar</button>
+                                <button type="submit" value="Submit" class="btn btn-primary">Unlock</button>
                         </div>
                         
                     </div>
-                    <button type="submit" value="Submit" class="btn btn-primary">Mark Complete</button>
                     
-                    <button type="button">Add to Calendar</button>
+                    
                 </form>
             </div>
         </body>
