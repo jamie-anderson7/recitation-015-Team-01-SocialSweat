@@ -12,14 +12,17 @@ CREATE TABLE IF NOT EXISTS friends (
 
 CREATE TABLE IF NOT EXISTS users_to_workouts (
     user_id INT NOT NULL,
-    workout_id INT
+    workout_name TEXT,
+    day INT,
+    hour INT,
+    minute INT
 );
 
 CREATE TABLE IF NOT EXISTS workouts (
     workout_id SERIAL PRIMARY KEY,
     name TEXT,
-    level INT,
-    sweats INT
+    difficulty TEXT,
+    instructions TEXT
 );
 
 /* Creating a valid user for lab 11, the big string is the bcrypt of 'password' */

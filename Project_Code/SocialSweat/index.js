@@ -330,8 +330,75 @@ app.post('/workouts', async(req, res) => {
 //     });
 // });
 
+app.post("/addToCalendar", (req, res) => {
+  let workoutID;
+  // Checks if the workout is already in the database
+  let findWorkout = `SELECT * FROM workouts WHERE name = '${req.body.workoutName}';`;
+  // Inserts the workout into users_to_workouts, stores the user ID, workout ID, and time
+  let addForCalendar = `INSERT INTO users_to_workouts (user_id, workout_name) VALUES ('${req.session.user.user_id}', '${req.body.workoutName}');`;
+  // Inserts a new workout into the database
+  let addWorkout = `INSERT INTO workouts (name, difficulty, instructions) VALUES ('${req.body.workoutName}', '${req.body.difficulty}', '${req.body.instructions}');`;
+
+  
+
+  // Checks if the workout is already in the database
+  db.any(findWorkout)
+  .then((foundWorkout) => {
+    // This means that there is not something with the same name
+    if(!(foundWorkout.length > 0))
+    {
+      db.any(addWorkout)
+      .then((redundant) => {
+
+      })
+      .catch((err) => {
+        console.log(err);
+        // res.render("partials/message", {
+        //   message: err
+        // });
+        res.redirect("/workouts");
+      });
+      
+    }
+    // Connects the user to the workout
+    db.any(addForCalendar)
+    .then((added) => {
+      res.redirect("/calendar");
+    })
+    .catch((err) => {
+      console.log(err);
+      res.render("partials/message", {
+        message: err
+      });
+      // res.redirect("/workouts");
+    });
+
+  })
+  .catch((err) => {
+    console.log(err);
+    res.render("partials/message", {
+      message: err
+    });
+    // res.redirect("/workouts");
+  });
+});
+
 app.get("/calendar", (req, res) => {
-  res.render("pages/calendar")
+  // Gets all the workouts that a user has saved
+  let findWorkouts = `SELECT * FROM users_to_workouts
+  INNER JOIN workouts
+  ON users_to_workouts.user_id = ${req.session.user.user_id} AND users_to_workouts.workout_name = workouts.name;`;
+
+  db.any(findWorkouts)
+  .then((results) => {
+    res.render("pages/calendar", {
+      workouts: results
+    });
+  })
+  .catch((err) => {
+    console.log(err);
+    res.redirect("/workouts");
+  });
 });
 
 //logout
