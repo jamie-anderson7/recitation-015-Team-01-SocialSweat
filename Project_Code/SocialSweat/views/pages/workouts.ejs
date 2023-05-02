@@ -20,17 +20,19 @@ Working on formatting, more in the middle of the page, smaller, easier to read -
                         <div class="col-sm">
                             <caption>Featured Workout</caption>
                             <% data.forEach(function(item) {%>
-                                <form action="/addToCalendar" method="POST">
+                                <form action="/calendar/add" method="POST">
                                     <div class="card" style="width: 21rem;">
                                         <div class="card-body">
                                             
                                             <h5 class="card-title">
                                                 <!-- These hidden inputs are for the purpose of adding to calendar-->
-                                                <input type="hidden" name="workoutName" value="<%- item.name %>"/>
+                                                <input type="hidden" name="workout" value="<%- item.name %>"/>
+                                                <input type="hidden" name="day" value="Wednesday"/>
+                                                <input type="hidden" name="time" value="12:00"/>
                                                 <%= item.name %>
                                             </h5>
                                             <p class="card-text">
-                                                <input type="hidden" name="instructions" value="<%- item.instructions %>"/>
+                                                <input type="hidden" name="instructions" value="<%- item.instructions; %>"/>
                                                 <input type="hidden" name="difficulty" value="<%- item.difficulty %>"/>
                                                 <%= item.instructions %>
                                             </p>
@@ -38,7 +40,7 @@ Working on formatting, more in the middle of the page, smaller, easier to read -
                                             <a href="#" class="card-link">Another link</a> -->
                                             
                                         </div>
-                                        
+                    
                                     </div>
                                     <button type="submit">Add to Calendar</button>
                                 </form>
@@ -47,53 +49,65 @@ Working on formatting, more in the middle of the page, smaller, easier to read -
                         </div>
 
                         <div class="col-sm">
+                            <caption>My Workouts</caption>
                             <% data.forEach(function(item) {%>
-                                <form action="/addToCalendar" method="POST">
+                                <form action="/calendar/add" method="POST">
                                     <div class="card" style="width: 21rem;">
                                         <div class="card-body">
+                                            
                                             <h5 class="card-title">
-                                                <%= item.name %>
                                                 <!-- These hidden inputs are for the purpose of adding to calendar-->
-                                                <input type="hidden" name="workoutName" value="<%- item.name %>"/>
+                                                <input type="hidden" name="workout" value="<%- item.name %>"/>
+                                                <input type="hidden" name="day" value="Wednesday"/>
+                                                <input type="hidden" name="time" value="12:00"/>
+                                                <%= item.name %>
                                             </h5>
                                             <p class="card-text">
-                                                <input type="hidden" name="instructions" value="<%- item.instructions %>"/>
+                                                <input type="hidden" name="instructions" value="<%- item.instructions; %>"/>
                                                 <input type="hidden" name="difficulty" value="<%- item.difficulty %>"/>
                                                 <%= item.instructions %>
                                             </p>
                                             <!-- <a href="#" class="card-link">Card link</a>
-                                        <a href="#" class="card-link">Another link</a> -->
+                                            <a href="#" class="card-link">Another link</a> -->
+                                            
                                         </div>
+                    
                                     </div>
                                     <button type="submit">Add to Calendar</button>
                                 </form>
                                 <% }); %>
+                                <button type="submit" value="Submit" class="btn btn-primary">Mark Complete</button>
                         </div>
 
                         <div class="col-sm">
                             <caption>Workout Shop</caption>
                             <% data.forEach(function(item) {%>
-                                <form action="/addToCalendar" method="POST">
+                                <form action="/calendar/add" method="POST">
                                     <div class="card" style="width: 21rem;">
                                         <div class="card-body">
+                                            
                                             <h5 class="card-title">
                                                 <!-- These hidden inputs are for the purpose of adding to calendar-->
-                                                <input type="hidden" name="workoutName" value="<%- item.name %>"/>
+                                                <input type="hidden" name="workout" value="<%- item.name %>"/>
+                                                <input type="hidden" name="day" value="Wednesday"/>
+                                                <input type="hidden" name="time" value="12:00"/>
                                                 <%= item.name %>
                                             </h5>
                                             <p class="card-text">
-                                                <input type="hidden" name="instructions" value="<%- item.instructions %>"/>
+                                                <input type="hidden" name="instructions" value="<%- item.instructions; %>"/>
                                                 <input type="hidden" name="difficulty" value="<%- item.difficulty %>"/>
                                                 <%= item.instructions %>
                                             </p>
                                             <!-- <a href="#" class="card-link">Card link</a>
-                                        <a href="#" class="card-link">Another link</a> -->
+                                            <a href="#" class="card-link">Another link</a> -->
+                                            
                                         </div>
+                    
                                     </div>
-                                    <button type="submit">Add to Calendar</button>
+                                    <button type="submit" disabled>Add to Calendar</button>
                                 </form>
                                 <% }); %>
-                                <button type="submit" value="Submit" class="btn btn-primary">Unlock</button>
+                                <button type="submit" value="Submit" class="btn btn-primary">Mark Complete</button>
                         </div>
                         
                     </div>
@@ -107,3 +121,8 @@ Working on formatting, more in the middle of the page, smaller, easier to read -
     </div>
 
     <%- include ('../partials/footer') %>
+
+    Newest version
+
+    
+
