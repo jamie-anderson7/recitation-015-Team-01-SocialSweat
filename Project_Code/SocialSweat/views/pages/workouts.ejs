@@ -15,65 +15,84 @@ Working on formatting, more in the middle of the page, smaller, easier to read -
                         </p>
                 </div>
 
-                <form action="/workouts" method="POST">
+                <!-- <form action="/workouts" method="POST"> -->
                     <div class="row">
                         <div class="col-sm">
                             <caption>Featured Workout</caption>
                             <% data.forEach(function(item) {%>
-                                <div class="card" style="width: 21rem;">
-                                    <div class="card-body">
-                                        <h5 class="card-title">
-                                            <%= item.name %>
-                                        </h5>
-                                        <p class="card-text">
-                                            <%= item.instructions %>
-                                        </p>
-                                        <!-- <a href="#" class="card-link">Card link</a>
-                  <a href="#" class="card-link">Another link</a> -->
+                                <form action="/addToCalendar" method="POST">
+                                    <div class="card" style="width: 21rem;">
+                                        <div class="card-body">
+                                            
+                                            <h5 class="card-title">
+                                                <!-- These hidden inputs are for the purpose of adding to calendar-->
+                                                <input type="hidden" name="workoutName" value="<%- item.name %>"/>
+                                                <%= item.name %>
+                                            </h5>
+                                            <p class="card-text">
+                                                <input type="hidden" name="instructions" value="<%- item.instructions %>"/>
+                                                <input type="hidden" name="difficulty" value="<%- item.difficulty %>"/>
+                                                <%= item.instructions %>
+                                            </p>
+                                            <!-- <a href="#" class="card-link">Card link</a>
+                                            <a href="#" class="card-link">Another link</a> -->
+                                            
+                                        </div>
                                         
                                     </div>
-                                    
-                                </div>
+                                    <button type="submit">Add to Calendar</button>
+                                </form>
                                 <% }); %>
-                                <button type="button">Add to Calendar</button>
                                 <button type="submit" value="Submit" class="btn btn-primary">Mark Complete</button>
                         </div>
 
                         <div class="col-sm">
                             <% data.forEach(function(item) {%>
-                                <div class="card" style="width: 21rem;">
-                                    <div class="card-body">
-                                        <h5 class="card-title">
-                                            <%= item.name %>
-                                        </h5>
-                                        <p class="card-text">
-                                            <%= item.instructions %>
-                                        </p>
-                                        <!-- <a href="#" class="card-link">Card link</a>
-                                    <a href="#" class="card-link">Another link</a> -->
+                                <form action="/addToCalendar" method="POST">
+                                    <div class="card" style="width: 21rem;">
+                                        <div class="card-body">
+                                            <h5 class="card-title">
+                                                <%= item.name %>
+                                                <!-- These hidden inputs are for the purpose of adding to calendar-->
+                                                <input type="hidden" name="workoutName" value="<%- item.name %>"/>
+                                            </h5>
+                                            <p class="card-text">
+                                                <input type="hidden" name="instructions" value="<%- item.instructions %>"/>
+                                                <input type="hidden" name="difficulty" value="<%- item.difficulty %>"/>
+                                                <%= item.instructions %>
+                                            </p>
+                                            <!-- <a href="#" class="card-link">Card link</a>
+                                        <a href="#" class="card-link">Another link</a> -->
+                                        </div>
                                     </div>
-                                </div>
+                                    <button type="submit">Add to Calendar</button>
+                                </form>
                                 <% }); %>
-                                <button type="button">Add to Calendar</button>
                         </div>
 
                         <div class="col-sm">
                             <caption>Workout Shop</caption>
                             <% data.forEach(function(item) {%>
-                                <div class="card" style="width: 21rem;">
-                                    <div class="card-body">
-                                        <h5 class="card-title">
-                                            <%= item.name %>
-                                        </h5>
-                                        <p class="card-text">
-                                            <%= item.instructions %>
-                                        </p>
-                                        <!-- <a href="#" class="card-link">Card link</a>
-                                    <a href="#" class="card-link">Another link</a> -->
+                                <form action="/addToCalendar" method="POST">
+                                    <div class="card" style="width: 21rem;">
+                                        <div class="card-body">
+                                            <h5 class="card-title">
+                                                <!-- These hidden inputs are for the purpose of adding to calendar-->
+                                                <input type="hidden" name="workoutName" value="<%- item.name %>"/>
+                                                <%= item.name %>
+                                            </h5>
+                                            <p class="card-text">
+                                                <input type="hidden" name="instructions" value="<%- item.instructions %>"/>
+                                                <input type="hidden" name="difficulty" value="<%- item.difficulty %>"/>
+                                                <%= item.instructions %>
+                                            </p>
+                                            <!-- <a href="#" class="card-link">Card link</a>
+                                        <a href="#" class="card-link">Another link</a> -->
+                                        </div>
                                     </div>
-                                </div>
+                                    <button type="submit">Add to Calendar</button>
+                                </form>
                                 <% }); %>
-                                <button type="button">Add to Calendar</button>
                                 <button type="submit" value="Submit" class="btn btn-primary">Unlock</button>
                         </div>
                         
