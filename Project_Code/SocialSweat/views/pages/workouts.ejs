@@ -16,8 +16,10 @@ Working on formatting, more in the middle of the page, smaller, easier to read -
                 </div>
 
                 <!-- <form action="/workouts" method="POST"> -->
+                <!-- <form action="/workouts" method="POST"> -->
                     <div class="row">
                         <div class="col-sm">
+                            <caption>Featured Workout</caption>
                             <caption>Featured Workout</caption>
                             <% data.forEach(function(item) {%>
                                 <form action="/addToCalendar" method="POST">
@@ -43,6 +45,7 @@ Working on formatting, more in the middle of the page, smaller, easier to read -
                                     <button type="submit">Add to Calendar</button>
                                 </form>
                                 <% }); %>
+                                <button type="submit" value="Submit" class="btn btn-primary">Mark Complete</button>
                                 <button type="submit" value="Submit" class="btn btn-primary">Mark Complete</button>
                         </div>
 
@@ -72,6 +75,7 @@ Working on formatting, more in the middle of the page, smaller, easier to read -
 
                         <div class="col-sm">
                             <caption>Workout Shop</caption>
+                            <caption>Workout Shop</caption>
                             <% data.forEach(function(item) {%>
                                 <form action="/addToCalendar" method="POST">
                                     <div class="card" style="width: 21rem;">
@@ -94,9 +98,11 @@ Working on formatting, more in the middle of the page, smaller, easier to read -
                                 </form>
                                 <% }); %>
                                 <button type="submit" value="Submit" class="btn btn-primary">Unlock</button>
+                                <button type="submit" value="Submit" class="btn btn-primary">Unlock</button>
                         </div>
                         
                     </div>
+                    
                     
                     
                 </form>
