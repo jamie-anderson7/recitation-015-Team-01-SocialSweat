@@ -10,11 +10,17 @@ const session = require('express-session'); // To set the session object. To sto
 const bcrypt = require('bcrypt'); //  To hash passwords
 const axios = require('axios'); // To make HTTP requests from our server. We'll learn more about it in Part B.
 
-
+app.set('view engine', 'ejs'); // set the view engine to EJS
+// app.use(bodyParser.json()); // specify the usage of JSON for parsing request body.
 const path = require('path')
-console.log(path.join(__dirname,'/recources/img'));
-app.use(express.static(path.join(__dirname,'/recources/img')));
+// console.log(path.join(__dirname,'/resources/img'));
+app.use(express.static(path.join(__dirname,'/resources/img')));
 app.use(express.static(__dirname + '/public'));
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
+);
 
 
 
@@ -53,8 +59,7 @@ db.connect()
 // <!-- Section 3 : App Settings -->
 // *****************************************************
 
-app.set('view engine', 'ejs'); // set the view engine to EJS
-app.use(bodyParser.json()); // specify the usage of JSON for parsing request body.
+
 
 // initialize session variables
 app.use(
@@ -65,11 +70,6 @@ app.use(
   })
 );
 
-app.use(
-  bodyParser.urlencoded({
-    extended: true,
-  })
-);
 
 
 app.get("/", (req, res) => {
@@ -285,7 +285,7 @@ app.get('/workouts',(req, res) => {
     };/* Deleted a 'g' here because it caused a syntax error */
     axios.request(options).then(function (response) {
       console.log(response.data)
-      res.render('pages/workouts', {data: response.data, sweats: sweatVal})
+      res.render('pages/workouts', {data: response.data, sweats: sweatVal});
     }).catch(function (error) {
       console.error(error);
     });
@@ -383,28 +383,98 @@ app.post("/addToCalendar", (req, res) => {
   });
 });
 
-app.get("/calendar", (req, res) => {
-  // Gets all the workouts that a user has saved
-  let findWorkouts = `SELECT * FROM users_to_workouts
-  INNER JOIN workouts
-  ON users_to_workouts.user_id = ${req.session.user.user_id} AND users_to_workouts.workout_name = workouts.name;`;
 
-  db.any(findWorkouts)
-  .then((results) => {
-    res.render("pages/calendar", {
-      workouts: results
-    });
-  })
-  .catch((err) => {
-    console.log(err);
-    res.redirect("/workouts");
-  });
-});
+
 
 //logout
 app.get("/logout", (req, res) => {
   req.session.destroy();
   res.render("pages/login");
 });
+
+
+//these are the API routes that edit the users list of workouts in the calendar ie "CALENDAR_WORKOUTS"
+
+app.get("/calendar", (req, res) => {
+  const query = `SELECT workout_id, workout, day, time FROM calendar_workouts WHERE user_id = ${req.session.user.user_id}`; //${req.session.user.user_id}
+  db.query(query)
+    .then((result) => {
+      res.render('pages/calendar', { workouts: result });
+    })
+    .catch((err) => {
+      console.error(err);
+      res.sendStatus(500); // internal server error
+    });
+});
+
+
+app.post('/calendar/add', (req, res) => {
+  const { workout, day, time } = req.body;
+  const user_id = req.session.user.user_id;
+
+  const query = `INSERT INTO calendar_workouts (workout, day, time, user_id) 
+                 VALUES ('${workout}', '${day}', '${time}', ${user_id})`;
+
+  db.query(query)
+    .then(() => {
+      const selectQuery = `SELECT workout_id, workout, day, time FROM calendar_workouts WHERE user_id = ${user_id}`;
+      return db.query(selectQuery);
+    })
+    .then((result) => {
+      res.render('pages/calendar', { workouts: result });
+    })
+    .catch((err) => {
+      console.error(err);
+      res.sendStatus(500); // internal server error
+    });
+});
+
+
+
+app.post('/calendar/update', (req, res) => {
+  const { workout_update, day_update, time_update, status} = req.body;
+  const user_id = req.session.user.user_id;
+  console.log('!!!REQ', req.body);
+
+  const update_workout = `UPDATE calendar_workouts SET workout = $1, day = $2, time = $3 WHERE workout_id = ${req.body.workout_id_update}`;
+  const delete_workout = `DELETE FROM calendar_workouts WHERE workout_id = ${req.body.workout_id_update}`;
+
+  if(status == 'update'){
+  db.query(update_workout, [workout_update[0], day_update, workout_update[1]])
+    .then(() => {
+      const selectQuery = `SELECT workout_id, workout, day, time FROM calendar_workouts WHERE user_id = ${user_id}`;
+      return db.query(selectQuery);
+    })
+    .then((result) => {
+      res.render('pages/calendar', { workouts: result });
+    })
+    .catch((err) => {
+      console.error(err);
+      res.sendStatus(500); // internal server error
+    });
+  }
+  else {
+
+  db.query(delete_workout)
+    .then(() => {
+      const selectQuery = `SELECT workout_id, workout, day, time FROM calendar_workouts WHERE user_id = ${user_id}`;
+      return db.query(selectQuery);
+    })
+    .then((result) => {
+      res.render('pages/calendar', { workouts: result });
+    })
+    .catch((err) => {
+      console.error(err);
+      res.sendStatus(500); // internal server error
+    });
+  }
+});
+
+
+
+app.delete('/calendar/delete', (req, res) => {
+  
+});
+
 
   module.exports = app.listen(3000);
