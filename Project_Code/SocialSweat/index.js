@@ -89,14 +89,34 @@ app.post("/register", async (req, res) => {
 
   // To-DO: Insert username and hashed password into 'users' table
   let ins = `INSERT INTO users (username, password, sweats) VALUES ('${req.body.username}', '${hash}',0);`;
-  db.any(ins)
-  .then(data => {
-    res.redirect("/login");
-  })
-  .catch( (err) => {
-    console.log(err);
+  let check = `SELECT * FROM users WHERE username = '${req.body.username}'`;
+  db.any(check)
+  .then((checkResult) => {
+    console.log(checkResult);
+  // This checks if any rows were returned
+  if(checkResult.length < 1)
+  {
+    db.any(ins)
+.then(data => {
+      res.redirect("login");
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  } 
+  // This case means that there are not any users that match the friend use id
+  else
+  {
+    res.render("partials/message", {
+      message : 'Error, username already exists, pick a different one',
+      error : true
+    });
+  }
+})
+.catch( (err) => {
+  console.log(err);
     res.redirect("/register");
-  });
+});
 });
 
 //LeaderBoard
@@ -166,9 +186,6 @@ app.post("/login", async (req, res) => {
       req.session.save();
       // res.redirect("/discover");
       res.redirect('/workouts');
-      res.status(200).json({
-        message: 'Success'
-      });
   
     }
     else{
@@ -336,7 +353,6 @@ app.get('/workouts',(req, res) => {
       }
     };/* Deleted a 'g' here because it caused a syntax error */
     axios.request(options).then(function (response) {
-      console.log(response.data)
       res.render('pages/workouts', {data: response.data, sweats: sweatVal});
     }).catch(function (error) {
       console.error(error);
@@ -447,17 +463,46 @@ app.get("/logout", (req, res) => {
 
 //these are the API routes that edit the users list of workouts in the calendar ie "CALENDAR_WORKOUTS"
 
-app.get("/calendar", (req, res) => {
-  const query = `SELECT workout_id, workout, day, time FROM calendar_workouts WHERE user_id = ${req.session.user.user_id}`; //${req.session.user.user_id}
-  db.query(query)
-    .then((result) => {
-      res.render('pages/calendar', { workouts: result });
-    })
-    .catch((err) => {
-      console.error(err);
-      res.sendStatus(500); // internal server error
+// app.get("/calendar", (req, res) => {
+//   try{
+//   const get_workouts = `SELECT workout_id, workout, day, time FROM calendar_workouts WHERE user_id = ${req.session.user.user_id};`;
+//   const get_friends_workouts = `SELECT friend_id, workout_id, workout, day, time FROM friends INNER JOIN 
+//   calendar_workouts ON friends.friend_id = calendar_workouts.user_id WHERE friends.user_id =  ${req.session.user.user_id}`;
+//   db.task('addFriend', (task) => {
+//     task.batch([task.any(get_workouts), task.any(get_friends_workouts)]);
+//   })
+//     .then((result) => {
+//       console.log(result);
+//       res.render('pages/calendar', { workouts: result[0], friends_workouts: result[1], sweats: req.session.user.sweats});
+//     })
+//     .catch((err) => {
+//       console.error(err);
+//       res.sendStatus(500); // internal server error
+//     });
+//   }
+//   catch(error){
+//     console.error(err);
+//     res.render("pages/login");
+//   }
+// });
+
+app.get("/calendar", async (req, res) => {
+  try {
+    const data = await db.task('getCalendarData', async (task) => {
+      const get_workouts = `SELECT workout_id, workout, day, time FROM calendar_workouts WHERE user_id = ${req.session.user.user_id};`;
+      const get_friends_workouts = `SELECT friend_id, workout_id, workout, day, time FROM friends INNER JOIN 
+        calendar_workouts ON friends.friend_id = calendar_workouts.user_id WHERE friends.user_id =  ${req.session.user.user_id}`;
+      const [workouts, friends_workouts] = await task.batch([task.any(get_workouts), task.any(get_friends_workouts)]);
+      return { workouts, friends_workouts };
     });
+    res.render('pages/calendar', { workouts: data.workouts, friends_workouts: data.friends_workouts, sweats: req.session.user.sweats });
+  } catch (err) {
+    console.error(err);
+    res.render("pages/login"); // internal server error
+  }
 });
+
+
 
 
 app.post('/calendar/add', (req, res) => {
@@ -468,12 +513,9 @@ app.post('/calendar/add', (req, res) => {
                  VALUES ('${workout}', '${day}', '${time}', ${user_id})`;
 
   db.query(query)
-    .then(() => {
-      const selectQuery = `SELECT workout_id, workout, day, time FROM calendar_workouts WHERE user_id = ${user_id}`;
-      return db.query(selectQuery);
-    })
     .then((result) => {
-      res.render('pages/calendar', { workouts: result });
+      res.redirect('/calendar');
+      // res.render('pages/calendar', { workouts: result, sweats: req.session.user.sweats });
     })
     .catch((err) => {
       console.error(err);
@@ -484,21 +526,17 @@ app.post('/calendar/add', (req, res) => {
 
 
 app.post('/calendar/update', (req, res) => {
-  const { workout_update, day_update, time_update, status} = req.body;
+  const { workout_update, day_update, time_update} = req.body;
+  const status = req.body.submit_button;
   const user_id = req.session.user.user_id;
-  console.log('!!!REQ', req.body);
 
   const update_workout = `UPDATE calendar_workouts SET workout = $1, day = $2, time = $3 WHERE workout_id = ${req.body.workout_id_update}`;
   const delete_workout = `DELETE FROM calendar_workouts WHERE workout_id = ${req.body.workout_id_update}`;
 
   if(status == 'update'){
   db.query(update_workout, [workout_update[0], day_update, workout_update[1]])
-    .then(() => {
-      const selectQuery = `SELECT workout_id, workout, day, time FROM calendar_workouts WHERE user_id = ${user_id}`;
-      return db.query(selectQuery);
-    })
     .then((result) => {
-      res.render('pages/calendar', { workouts: result });
+      res.redirect('/calendar');
     })
     .catch((err) => {
       console.error(err);
@@ -508,24 +546,14 @@ app.post('/calendar/update', (req, res) => {
   else {
 
   db.query(delete_workout)
-    .then(() => {
-      const selectQuery = `SELECT workout_id, workout, day, time FROM calendar_workouts WHERE user_id = ${user_id}`;
-      return db.query(selectQuery);
-    })
     .then((result) => {
-      res.render('pages/calendar', { workouts: result });
+      res.redirect('/calendar');
     })
     .catch((err) => {
       console.error(err);
       res.sendStatus(500); // internal server error
     });
   }
-});
-
-
-
-app.delete('/calendar/delete', (req, res) => {
-  
 });
 
 
