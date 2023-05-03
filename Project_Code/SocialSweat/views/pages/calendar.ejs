@@ -13,13 +13,16 @@
                 document.querySelector('#day_update').value = day;
             }
             </script>
+            <div id="sweats" class="row" style="padding-left: 20px;">
+                Sweats: <%= sweats %>
+            </div>
         <div id="calendar" class="row">
             <% const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']; %>
             <% days.forEach(function(day) { %>
                 <div class="col-sm m-1 bg-white rounded px-1 px-md-2" id="<%- day.toLowerCase() %>">
                     <div class="h6 text-center position-relative py-2">
                         <%= day %>
-                        <i class="'bi bi-calendar-plus btn position-absolute translate-middle start-100  rounded p-0 btn-link'" 
+                        <i class="'bi bi-calendar-plus btn position-absolute translate-middle start-100 </i>'" 
                         onclick="document.getElementById('create-modal').style.display='block'"></i>
                     </div>
                     <div class="event-container">

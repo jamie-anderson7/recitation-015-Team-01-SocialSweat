@@ -399,7 +399,7 @@ app.get("/calendar", (req, res) => {
   const query = `SELECT workout_id, workout, day, time FROM calendar_workouts WHERE user_id = ${req.session.user.user_id}`; //${req.session.user.user_id}
   db.query(query)
     .then((result) => {
-      res.render('pages/calendar', { workouts: result });
+      res.render('pages/calendar', { workouts: result, sweats: req.session.user.sweats});
     })
     .catch((err) => {
       console.error(err);
@@ -421,7 +421,7 @@ app.post('/calendar/add', (req, res) => {
       return db.query(selectQuery);
     })
     .then((result) => {
-      res.render('pages/calendar', { workouts: result });
+      res.render('pages/calendar', { workouts: result, sweats: req.session.user.sweats });
     })
     .catch((err) => {
       console.error(err);
@@ -432,7 +432,8 @@ app.post('/calendar/add', (req, res) => {
 
 
 app.post('/calendar/update', (req, res) => {
-  const { workout_update, day_update, time_update, status} = req.body;
+  const { workout_update, day_update, time_update} = req.body;
+  const status = req.body.submit_button;
   const user_id = req.session.user.user_id;
   console.log('!!!REQ', req.body);
 
@@ -446,7 +447,7 @@ app.post('/calendar/update', (req, res) => {
       return db.query(selectQuery);
     })
     .then((result) => {
-      res.render('pages/calendar', { workouts: result });
+      res.render('pages/calendar', { workouts: result, sweats: req.session.user.sweats });
     })
     .catch((err) => {
       console.error(err);
@@ -461,19 +462,13 @@ app.post('/calendar/update', (req, res) => {
       return db.query(selectQuery);
     })
     .then((result) => {
-      res.render('pages/calendar', { workouts: result });
+      res.render('pages/calendar', { workouts: result, sweats: req.session.user.sweats});
     })
     .catch((err) => {
       console.error(err);
       res.sendStatus(500); // internal server error
     });
   }
-});
-
-
-
-app.delete('/calendar/delete', (req, res) => {
-  
 });
 
 
