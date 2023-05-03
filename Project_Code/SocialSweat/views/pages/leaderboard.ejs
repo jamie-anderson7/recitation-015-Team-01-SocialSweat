@@ -45,9 +45,14 @@
               
               <input type="submit" label="Submit">
             </form>
-            <p style=" align-self: center;">
+            <p style="align-content: center;">
               Your User ID: <%- userID %>
             </p>
+            <% if(locals.message){ %>
+              <p>
+                <%= message %>
+              </p>
+            <% }%>
           </div>
         </div>
       </div>

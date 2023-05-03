@@ -201,20 +201,61 @@ app.post('/addFriend', (req, res) => {
   let addForward = `INSERT INTO friends (user_id, friend_id) VALUES ('${user}', '${friend}');`;
   let addReverse = `INSERT INTO friends (user_id, friend_id) VALUES ('${friend}', '${user}');`;
   let check = `SELECT * FROM users WHERE user_id = '${friend}';`;
+  let checkAlreadyFriends = `SELECT * FROM friends WHERE friend_id = '${friend}' AND user_id = '${user}'`;
+  // Required to render the leaderboard multiple times
+  let query = `SELECT users.user_id, sweats, username FROM users
+  INNER JOIN friends
+  ON friends.user_id = '${req.session.user.user_id}' AND users.user_id = friends.friend_id ORDER BY sweats LIMIT 6;`;
 
   db.any(check)
   .then((checkResult) => {
     // This checks if any rows were returned
     if(checkResult.length > 0)
     {
-      // Adds to friends table
-      db.task('addFriend', (task) => {
-        return task.batch([task.any(addForward), task.any(addReverse)]);
-      })
-      .then((data) => {
-        res.render("partials/message", {
-          message: 'Friend added successfully.'
-        });
+      db.any(checkAlreadyFriends)
+      .then((alreadyFriendsResult) => {
+        if(alreadyFriendsResult.length > 0)
+        {
+          // Passes friends back to leaderboard
+          db.any(query)
+          .then(friendsResult => {
+            // Renders leaderboard and message
+            res.render("pages/leaderboard", {
+              message: 'Cannot add, already friends with that user',
+              friends: friendsResult,
+              userID: req.session.user_id
+            });
+          })
+          .catch( (err) => {
+            console.log(err);
+          });
+        }
+        else
+        {
+          // Adds to friends table
+          db.task('addFriend', (task) => {
+            return task.batch([task.any(addForward), task.any(addReverse)]);
+          })
+          .then((data) => {
+            // Passes friends back to leaderboard
+            db.any(query)
+            .then(friendsResult => {
+              // Renders leaderboard and message
+              res.render("pages/leaderboard", {
+                message: 'Friend added successfully.',
+                friends: friendsResult,
+                userID: req.session.user_id
+              });
+            })
+            .catch( (err) => {
+              console.log(err);
+            });
+            
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -223,10 +264,21 @@ app.post('/addFriend', (req, res) => {
     // This case means that there are not any users that match the friend use id
     else
     {
-      res.render("partials/message", {
-        message : 'Cannot add friend, user ID does not exist.',
-        error : true
+      
+      // Passes friends back to leaderboard
+      db.any(query)
+      .then(friendsResult => {
+        // Renders leaderboard and message
+        res.render("pages/leaderboard", {
+          message : 'Cannot add friend, user ID does not exist.',
+          friends: friendsResult,
+          userID: req.session.user_id
+        });
+      })
+      .catch( (err) => {
+        console.log(err);
       });
+      
     }
   })
   .catch( (err) => {
