@@ -38,7 +38,7 @@
                             <% if(workout.day == day) { %>
                                 <div class="event row border rounded m-1 py-1" id="workout-<%= workout.workout_id %>" style="background-color:rgb(225, 255, 251)">
                                     <div class="col event-title">
-                                        <i><%= workout.friend_id %></i> <b><%= workout.workout %></b> <p><%= workout.time %></p>  </div>
+                                        <p><i><%= workout.username %></i></p> <b><%= workout.workout %></b> <p><%= workout.time %></p>  </div>
                                 </div>
                             <% } %>
                         <% }); %>
