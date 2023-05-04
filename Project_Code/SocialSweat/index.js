@@ -396,12 +396,12 @@ let diffVar = 'beginner';
 
 app.get('/workouts', (req, res) => {
   try {
-      let Value = Math.floor(Math.random()*10)
+      let Value = Math.floor(Math.random()*200)
       let sweatVal = req.session.user.sweats;
       let diffVar = 'beginner';
-      if (sweatVal >= 100) {
+      if (sweatVal >= 1000) {
         diffVar = 'intermediate';
-      } else if (sweatVal >= 200) {
+      } else if (sweatVal >= 2000) {
         diffVar = 'expert';
       } 
       const options = {
@@ -438,6 +438,7 @@ app.post('/workouts', async(req, res) => {
   await db.any(query, [sweatVal, req.session.user.username])
  res.redirect('/workouts')
 })
+
 
 app.get('/workouts-shop', (req, res) => {
   try {
