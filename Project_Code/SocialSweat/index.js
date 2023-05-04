@@ -392,7 +392,7 @@ app.post('/workouts', async(req, res) => {
 //     });
 // });
 
-app.post("/addToCalendar", (req, res) => {
+app.post("/saveWorkout", (req, res) => {
   let workoutID;
   // Checks if the workout is already in the database
   let findWorkout = `SELECT * FROM workouts WHERE name = '${req.body.workoutName}';`;
