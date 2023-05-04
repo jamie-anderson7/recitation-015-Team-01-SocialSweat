@@ -1,22 +1,45 @@
 <%- include ('../partials/header') %>
 
 <main>
-    
+    <body style="background: rgb(74,240,255);">
+      <style>
+        form {
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+      </style>
   <div class="container">
     <!-- THE REST OF YOUR HTML CODE GOES HERE -->
-    <div id="messageContainer" style="background-color: lightgray; margin-top: 10px; margin-bottom: 10px;">
+    <div id="messageContainer" style="background-color: #f2f2f2; border-radius: 10px; padding: 10px; margin-top: 10px; margin-bottom: 10px; transition: opacity 0.5s ease-in-out;">
       <% if(locals.message){%>
-        <% if(locals.color = 'red') {%>
-          <p style="color:red">
+        <% if(locals.color == 'red') {%>
+          <p style="color: #ff6666; font-size: 16px; font-weight: bold; text-align: center; margin: 0;">
             <%= message %>
           </p>
         <% } else {%>
-          <p style="color:green">
+          <p style="color: #66cc66; font-size: 16px; font-weight: bold; text-align: center; margin: 0;">
             <%= message %>
           </p>
         <% } %>
       <% } %>
     </div>
+    
+    <script>
+      // Wait for 3 seconds before fading out the message container
+      setTimeout(function() {
+        var messageContainer = document.getElementById("messageContainer");
+        messageContainer.style.opacity = 0;
+        // Wait for the transition to complete before removing the message container
+        setTimeout(function() {
+          messageContainer.parentNode.removeChild(messageContainer);
+        }, 500);
+      }, 3000);
+    </script>
+    
+    
+
     <form action="/register" method="POST">
 
       <div class="form-group" style="margin-bottom: 15px; margin-top: 15px">
@@ -34,6 +57,7 @@
 
     </form>
   </div>
+</body>
 </main>
 
 <%- include ('../partials/footer') %>
