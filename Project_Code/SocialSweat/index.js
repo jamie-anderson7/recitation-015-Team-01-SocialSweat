@@ -118,30 +118,33 @@ app.post("/register", async (req, res) => {
   db.any(check)
   .then((checkResult) => {
     console.log(checkResult);
-  // This checks if any rows were returned
-  if(checkResult.length < 1)
-  {
-    db.any(ins)
-.then(data => {
-      res.redirect("login");
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-  } 
-  // This case means that there are not any users that match the friend use id
-  else
-  {
-    res.render("partials/message", {
-      message : 'Error, username already exists, pick a different one',
-      error : true
-    });
-  }
-})
-.catch( (err) => {
-  console.log(err);
-    res.redirect("/register");
-});
+    // This checks if any rows were returned
+    if(checkResult.length < 1)
+    {
+      db.any(ins)
+      .then(data => {
+        res.render("pages/login", {
+          message: 'User added successfully',
+          color: 'green'
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    } 
+    // This case means that there are not any users that match the friend use id
+    else
+    {
+          res.render("pages/register", {
+            message : 'Error, username already exists, pick a different one',
+            color : 'red'
+          });
+    }
+  })
+  .catch( (err) => {
+    console.log(err);
+      res.redirect("/register");
+  });
 });
 
 //LeaderBoard
@@ -216,9 +219,12 @@ app.post("/login", async (req, res) => {
   
   db.one(query)
   .then( async (user) => {
-    if(user == '')
+    if(user.length)
     {
-      res.render('/register');
+      res.render('pages/register', {
+        message : 'User does not exist',
+        color: 'red'
+      });
     }
     
     // check if password from request matches with password in DB
@@ -233,7 +239,6 @@ app.post("/login", async (req, res) => {
       // Commented out because there is no discover page
       req.session.user = user;
       req.session.save();
-      // res.redirect("/discover");
       res.redirect('/workouts');
   
     }
@@ -244,17 +249,23 @@ app.post("/login", async (req, res) => {
       // });
       // console.log('Incorrect username or password.');
 
-      res.redirect('/login');
-      //work on getting modal to display, currently just reloads login page
-      res.status(200).json({
-        message: 'Incorrect username or password'
+      res.render('pages/login', {
+        message: 'Incorrect username or password',
+        color: 'red'
       });
+      //work on getting modal to display, currently just reloads login page
+      // res.status(200).json({
+      //   message: 'Incorrect username or password'
+      // });
       
     }
   })
   .catch((error) => {
     console.log(error)
-    res.render("pages/register")
+    res.render('pages/register', {
+      message : 'User does not exist',
+      color: 'red'
+    });
   })
 
 
@@ -450,7 +461,7 @@ app.post('/workouts', async(req, res) => {
 //     });
 // });
 
-app.post("/addToCalendar", (req, res) => {
+app.post("/saveWorkout", (req, res) => {
   let workoutID;
   // Checks if the workout is already in the database
   let findWorkout = `SELECT * FROM workouts WHERE name = '${req.body.workoutName}';`;
@@ -509,7 +520,10 @@ app.post("/addToCalendar", (req, res) => {
 //logout
 app.get("/logout", (req, res) => {
   req.session.destroy();
-  res.render("pages/login");
+  res.render("pages/login", {
+    message : 'Logged out successfully',
+    color : 'green'
+  });
 });
 
 

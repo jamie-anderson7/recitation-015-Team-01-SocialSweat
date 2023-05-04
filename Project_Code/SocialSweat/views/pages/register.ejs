@@ -4,6 +4,19 @@
     
   <div class="container">
     <!-- THE REST OF YOUR HTML CODE GOES HERE -->
+    <div id="messageContainer" style="background-color: lightgray; margin-top: 10px; margin-bottom: 10px;">
+      <% if(locals.message){%>
+        <% if(locals.color = 'red') {%>
+          <p style="color:red">
+            <%= message %>
+          </p>
+        <% } else {%>
+          <p style="color:green">
+            <%= message %>
+          </p>
+        <% } %>
+      <% } %>
+    </div>
     <form action="/register" method="POST">
 
       <div class="form-group" style="margin-bottom: 15px; margin-top: 15px">
