@@ -1,0 +1,81 @@
+<%- include ('../partials/header') %>
+
+
+    <div class="container">
+        <!-- THE REST OF YOUR HTML CODE GOES HERE -->
+            
+        <body>
+            <form action="\workouts" method="POST">
+            <div class="container">
+                <div class="row">
+                    <p style="float: right">Sweats:
+                        <%= sweats%>
+                        </p>
+                </div>
+                <!-- <form action="/workouts" method="POST"> -->
+                    <div class="row">
+
+                        <div class="col-sm">
+                            <caption>Workout Shop</caption>
+                            <% data.forEach(function(item) {%>
+                                <form action="/calendar/add" method="POST">
+                                    <div class="card" style="width: 21rem;">
+                                        <div class="card-body" onclick="document.getElementById('info-modal-<%= item.name %>').style.display='block'">
+                                            
+                                            <h5 class="card-title">
+                                                <!-- These hidden inputs are for the purpose of adding to calendar-->
+                                                <input type="hidden" name="workout" value="<%- item.name %>"/>
+                                                <input type="hidden" name="day" value="Wednesday"/>
+                                                <input type="hidden" name="time" value="12:00"/>
+                                                <%= item.name %>
+                                            </h5>
+                                            <p class="card-text">
+                                                <input type="hidden" name="instructions" value="<%- item.instructions; %>"/>
+                                                <input type="hidden" name="difficulty" value="<%- item.difficulty %>"/>
+                                                <%= item.instructions.split(" ").slice(0, 20).join(" ") %>...
+                                            </p>
+                                            <!-- <a href="#" class="card-link">Card link</a>
+                                            <a href="#" class="card-link">Another link</a> -->
+                                            
+                                        </div>
+
+                                        <div id="info-modal-<%= item.name %>" class="modal" tabindex="-1">
+                                            <div class="modal-dialog">
+                                              <div class="modal-content">
+                                                <div class="modal-header">
+                                                  <h5 class="modal-title"><%= item.name %></h5>
+                                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" 
+                                                  onclick="document.getElementById('info-modal-<%= item.name %>').style.display='none'"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p><%= item.instructions %></p>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        
+                                        </div>
+                                    </div>
+                                    <button type="submit">Add to Calendar</button>
+                                </form>
+                                <form action="saveWorkout" method="POST">
+                                    <input type="hidden" name="workoutName" value="<%- item.name %>"/>
+                                    <input type="hidden" name="instructions" value="<%- item.instructions; %>"/>
+                                    <input type="hidden" name="difficulty" value="<%- item.difficulty %>"/>
+
+                                    <button type="submit">Save Workout</button>
+                                </form>
+                                <% }); %>
+                                
+                        </div>
+                        
+                    </div>
+                    
+                    
+                </form>
+            </div>
+        </body>
+        <br>
+        <br>
+    </div>
+
+    <%- include ('../partials/footer') %>

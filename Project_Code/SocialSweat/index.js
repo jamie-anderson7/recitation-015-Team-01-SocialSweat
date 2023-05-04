@@ -438,6 +438,52 @@ app.post('/workouts', async(req, res) => {
   await db.any(query, [sweatVal, req.session.user.username])
  res.redirect('/workouts')
 })
+
+app.get('/workouts-shop', (req, res) => {
+  try {
+      let Value = Math.floor(Math.random()*10)
+      let sweatVal = req.session.user.sweats;
+      let diffVar = 'beginner';
+      if (sweatVal >= 100) {
+        diffVar = 'intermediate';
+      } else if (sweatVal >= 200) {
+        diffVar = 'expert';
+      } 
+      const options = {
+        method: 'GET',
+        url: 'https://exercises-by-api-ninjas.p.rapidapi.com/v1/exercises',
+        params: {difficulty: diffVar, offset: Value},
+  
+        headers: {
+          'X-RapidAPI-Key': 'd118bffb72mshefac1d32ada5f14p1523e5jsnc3415735b0dc',
+          'X-RapidAPI-Host': 'exercises-by-api-ninjas.p.rapidapi.com'
+        }
+      };/* Deleted a 'g' here because it caused a syntax error */
+      axios.request(options).then(function (response) {
+        console.log(response.data)
+        res.render('pages/workouts-shop', {data: response.data, sweats: sweatVal})
+      }).catch(function (error) {
+        console.error(error);
+      });
+
+  } catch (error) {
+    console.error(error);
+    //need message for error
+    res.render("pages/login")
+    // Expected output: ReferenceError: nonExistentFunction is not defined
+    // (Note: the exact output may be browser-dependent)
+  }
+  
+});
+
+app.post('/workouts-shop', async(req, res) => {
+  // let sweatVal = req.session.user.sweats;
+  // sweatVal = sweatVal + 10
+  // req.session.user.sweats = sweatVal;
+  // let query = 'update users set sweats = $1 where username = $2 returning * ;';
+  // await db.any(query, [sweatVal, req.session.user.username])
+ res.redirect('/workouts-shop')
+})
 // app.put('/workouts', function (req, res) {
 //   let sweatVal = req.session.user.sweats;
 //   sweatVal = sweatVal + 10
