@@ -89,17 +89,37 @@ app.post("/register", async (req, res) => {
 
   // To-DO: Insert username and hashed password into 'users' table
   let ins = `INSERT INTO users (username, password, sweats) VALUES ('${req.body.username}', '${hash}',0);`;
-  db.any(ins)
-  .then(data => {
-    res.render("pages/login", {
-      message: 'User added successfully',
-      color: 'green'
-    });
+  let check = `SELECT * FROM users WHERE username = '${req.body.username}'`;
+  db.any(check)
+  .then((checkResult) => {
+    console.log(checkResult);
+    // This checks if any rows were returned
+    if(checkResult.length < 1)
+    {
+      db.any(ins)
+      .then(data => {
+        res.render("pages/login", {
+          message: 'User added successfully',
+          color: 'green'
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    } 
+    // This case means that there are not any users that match the friend use id
+    else
+    {
+          res.render("pages/register", {
+            message : 'Error, username already exists, pick a different one',
+            color : 'red'
+          });
+    }
   })
   .catch( (err) => {
     console.log(err);
-    res.redirect("/register");
-});
+      res.redirect("/register");
+  });
 });
 
 //LeaderBoard
