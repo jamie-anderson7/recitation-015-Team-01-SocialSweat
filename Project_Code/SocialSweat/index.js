@@ -3,16 +3,41 @@
 // *****************************************************
 
 const express = require('express'); // To build an application server or API
+const multer = require('multer')
 const app = express();
+const fs = require('fs');
+const path = require('path')
 const pgp = require('pg-promise')(); // To connect to the Postgres DB from the node server
 const bodyParser = require('body-parser');
 const session = require('express-session'); // To set the session object. To store or access session data, use the `req.session`, which is (generally) serialized as JSON by the store.
 const bcrypt = require('bcrypt'); //  To hash passwords
 const axios = require('axios'); // To make HTTP requests from our server. We'll learn more about it in Part B.
 
+
+// Define the folder where the images are located
+const imgDir = path.join(__dirname, 'resources', 'img');
+
+// Define the server endpoint to handle the GET request for a random image
+app.get('/get-random-image', (req, res) => {
+  // Read the files in the image folder
+  fs.readdir(imgDir, (err, files) => {
+    if (err) {
+      console.error(err);
+      return;
+    }
+  
+    const randomIndex = Math.floor(Math.random() * files.length);
+    const randomImg = files[randomIndex];
+    const imgSrc = randomImg;
+    
+    // Send the image source URL as a response
+    res.send(imgSrc);
+    console.log('Random image selected:', randomImg);
+  });
+});
+
 app.set('view engine', 'ejs'); // set the view engine to EJS
 // app.use(bodyParser.json()); // specify the usage of JSON for parsing request body.
-const path = require('path')
 // console.log(path.join(__dirname,'/resources/img'));
 app.use(express.static(path.join(__dirname,'/resources/img')));
 app.use(express.static(__dirname + '/public'));
@@ -143,6 +168,30 @@ app.get('/leaderboard', (req, res) => {
     // Expected output: ReferenceError: nonExistentFunction is not defined
     // (Note: the exact output may be browser-dependent)
   }
+});
+
+
+// Set up multer storage and limits
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'resources/img');
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  }
+});
+
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 1024 * 1024 * 5 // 5 MB
+  }
+});
+
+
+app.post('/upload', upload.single('image'), (req, res) => {
+  console.log(req.file);
+  res.send('File uploaded successfully!');
 });
 
 //Home
