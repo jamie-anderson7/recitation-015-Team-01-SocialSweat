@@ -1,9 +1,7 @@
 <%- include ('../partials/header') %>
 
-
 <main>
-    </head>
-    <body>
+    <body style="background-image: linear-gradient(0deg, rgba(179,255,200,1) 0%, rgba(74,240,255,1) 100%);">
         <script>
             function openUpdateModal(workout_id, workout, day, time) {
                 document.getElementById('update-modal').style.display='block';
@@ -16,10 +14,10 @@
             <div id="sweats" class="row" style="padding-left: 20px;">
                 Sweats: <%= sweats %>
             </div>
-        <div id="calendar" class="row">
+        <div id="calendar" class="row" style="background-color: rgba(255, 255, 255, 0);">
             <% const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']; %>
             <% days.forEach(function(day) { %>
-                <div class="col-sm m-1 bg-white rounded px-1 px-md-2" id="<%- day.toLowerCase() %>">
+                <div class="col-sm m-1 bg-white rounded px-1 px-md-2" id="<%- day.toLowerCase() %>" style="background: linear-gradient(0deg, rgba(74,240,255,1) 0%, rgba(179,255,200,1) 100%);">
                     <div class="h6 text-center position-relative py-2">
                         <%= day %>
                         <i class="'bi bi-calendar-plus btn position-absolute translate-middle start-100 </i>'" 
@@ -28,7 +26,7 @@
                     <div class="event-container">
                         <% workouts.forEach(function(workout) { %>
                             <% if (workout.day == day) { %>
-                                <div class="event row border rounded m-1 py-1" id="workout-<%= workout.workout_id %>">
+                                <div class="event row border rounded m-1 py-1" id="workout-<%= workout.workout_id %>" style="background-color: rgba(255, 255, 255);">
                                     <div class="col event-title" onclick="openUpdateModal('<%= workout.workout_id %>', '<%= workout.workout %>', '<%= workout.day %>', '<%= workout.time %>')">
                                         <b><%= workout.workout %></b> <p><%= workout.time %></p>  </div>
                                 </div>
