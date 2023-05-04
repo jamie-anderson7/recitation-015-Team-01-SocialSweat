@@ -23,3 +23,13 @@ SELECT friend_id FROM friends WHERE user_id = 1;
 */
 SELECT username, sweats FROM users ORDER BY sweats DESC LIMIT 5;
 
+/*
+* Gets all workouts related to a user
+*/
+CREATE VIEW userWorkouts AS (SELECT * FROM users_to_workouts WHERE user_id = 1);
+
+SELECT workouts.name, workouts.difficulty, workouts.instructions FROM workouts
+  INNER JOIN userWorkouts
+  ON userWorkouts.workout_name = workouts.name;
+
+DROP VIEW userWorkouts;

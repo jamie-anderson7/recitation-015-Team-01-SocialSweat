@@ -399,26 +399,52 @@ app.get('/workouts', (req, res) => {
       let Value = Math.floor(Math.random()*200)
       let sweatVal = req.session.user.sweats;
       let diffVar = 'beginner';
-      if (sweatVal >= 1000) {
-        diffVar = 'intermediate';
-      } else if (sweatVal >= 2000) {
-        diffVar = 'expert';
-      } 
-      const options = {
-        method: 'GET',
-        url: 'https://exercises-by-api-ninjas.p.rapidapi.com/v1/exercises',
-        params: {difficulty: diffVar, offset: Value},
-  
-        headers: {
-          'X-RapidAPI-Key': 'd118bffb72mshefac1d32ada5f14p1523e5jsnc3415735b0dc',
-          'X-RapidAPI-Host': 'exercises-by-api-ninjas.p.rapidapi.com'
-        }
-      };/* Deleted a 'g' here because it caused a syntax error */
-      axios.request(options).then(function (response) {
-        res.render('pages/workouts', {data: response.data, sweats: sweatVal})
-      }).catch(function (error) {
-        console.error(error);
-      });
+
+      let getWorkoutNamesByID = `CREATE VIEW userWorkouts AS (SELECT * FROM users_to_workouts WHERE user_id = '${req.session.user.user_id}');`;
+      let getAllWorkouts = `SELECT workouts.name, workouts.difficulty, workouts.instructions FROM workouts
+      INNER JOIN userWorkouts
+      ON userWorkouts.workout_name = workouts.name;`;
+      let dropView = `DROP VIEW userWorkouts;`;
+      
+      db.any(getWorkoutNamesByID)
+      .then( redundant => {
+        db.any(getAllWorkouts)
+        .then( results => {
+          db.any(dropView)
+          .then( redundant2 => {
+            if (sweatVal >= 100) {
+              diffVar = 'intermediate';
+            } else if (sweatVal >= 200) {
+              diffVar = 'expert';
+            } 
+            const options = {
+              method: 'GET',
+              url: 'https://exercises-by-api-ninjas.p.rapidapi.com/v1/exercises',
+              params: {difficulty: diffVar, offset: Value},
+        
+              headers: {
+                'X-RapidAPI-Key': 'd118bffb72mshefac1d32ada5f14p1523e5jsnc3415735b0dc',
+                'X-RapidAPI-Host': 'exercises-by-api-ninjas.p.rapidapi.com'
+              }
+            };/* Deleted a 'g' here because it caused a syntax error */
+            axios.request(options).then(function (response) {
+              console.log(response.data)
+              res.render('pages/workouts', {data: response.data, sweats: sweatVal, workouts: results})
+            }).catch(function (error) {
+              console.error(error);
+            });
+          })
+          .catch(err => {
+            console.log(err);
+          })
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      })
+      .catch(err =>{
+        console.log(err);
+      })
 
   } catch (error) {
     console.error(error);
@@ -522,7 +548,7 @@ app.post("/saveWorkout", (req, res) => {
   db.any(findWorkout)
   .then((foundWorkout) => {
     // This means that there is not something with the same name
-    if(!(foundWorkout.length > 0))
+    if(foundWorkout.length == 0)
     {
       db.any(addWorkout)
       .then((redundant) => {
