@@ -13,32 +13,94 @@
 
   <main>
     <div class="container">
-      <!-- THE REST OF YOUR HTML CODE GOES HERE -->
       <div class="row mt-5">
-        <div class="col-md-8 left-col" style="margin-bottom: 40px; margin-right: 50px;">
+        <div class="col-md-8 left-col" style="width: 70%">
           <div class="left-div" style="background:lightgrey; padding: 20px; margin-bottom: 30px;">
             <!-- content for the left div goes here -->
             <div class="title-div" style="text-align: center; margin-bottom: 30px;">
               <h2>Feed</h2>
             </div>
-            <% friends.forEach(function(item) {%>
             <div class="row" style="margin-right: 0px; margin-left: 0px;">
               <div class="col-md-6 mb-3">
                 <div class="box" style="width:100%; background: white; border: 1px solid black; padding: 10px;">
-                  <img src="img1.jpg" alt="image1" style="width:100%">
+                  <img src="img1.jpg" alt="image1" style="width:100%; height:200px;">
                   <div class="row mt-3">
-                    <div class="col-md-6">Friend Name: <%- item.username %></div>
+                    <div class="col-md-6">Friend Name: </div>
+                    <div class="col-md-6">Workout Name:</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <div class="box" style="width:100%; background: white; border: 1px solid black; padding: 10px;">
+                  <img src="img1.jpg" alt="image1" style="width:100%; height:200px;">
+                  <div class="row mt-3">
+                    <div class="col-md-6">Friend Name: </div>
                     <div class="col-md-6">Workout Name:</div>
                   </div>
                 </div>
               </div>
             </div>
-            <% }); %>
+            <div class="row" style="margin-right: 0px; margin-left: 0px;">
+              <div class="col-md-6 mb-3">
+                <div class="box" style="width:100%; background: white; border: 1px solid black; padding: 10px;">
+                  <img src="img1.jpg" alt="image1" style="width:100%; height:200px;">
+                  <div class="row mt-3">
+                    <div class="col-md-6">Friend Name: </div>
+                    <div class="col-md-6">Workout Name:</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <div class="box" style="width:100%; background: white; border: 1px solid black; padding: 10px;">
+                  <img src="img1.jpg" alt="image1" style="width:100%; height:200px;">
+                  <div class="row mt-3">
+                    <div class="col-md-6">Friend Name: </div>
+                    <div class="col-md-6">Workout Name:</div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="col-md-4">
-          <div class="right-div" style="background:lightgrey">
-            <!-- content for the right div goes here -->  
+        <div class="col-md-4 right-col" style="width: 30%;">
+          <div class="right-top-div" style="background:lightgrey; padding: 20px; margin-bottom: 30px;">
+            <!-- content for the right div goes here -->
+            <h5 style="margin-bottom: 45px">Leaderboard</h5>
+            <div class="row mt-3" style="margin-left: 15px; margin-right: 15px; margin-bottom: 50px;">
+              <div class="box" style="width:100%; background: white">
+                <div class="row mt-3" style="display: flex; justify-content: space-between; align-items: center;">
+                  <div class="col-md-6" style="margin-bottom: 10px">Friend Name: </div>
+                  <div class="col-md-6" style="margin-bottom: 10px; font-size: smaller;">Total Sweats:</div>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-3" style="margin-left: 15px; margin-right: 15px; margin-bottom: 50px;">
+              <div class="box" style="width:100%; background: white">
+                <div class="row mt-3" style="display: flex; justify-content: space-between; align-items: center;">
+                  <div class="col-md-6" style="margin-bottom: 10px">Friend Name: </div>
+                  <div class="col-md-6" style="margin-bottom: 10px; font-size: smaller;">Total Sweats:</div>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-3" style="margin-left: 15px; margin-right: 15px; margin-bottom: 50px;">
+              <div class="box" style="width:100%; background: white">
+                <div class="row mt-3" style="display: flex; justify-content: space-between; align-items: center;">
+                  <div class="col-md-6" style="margin-bottom: 10px">Friend Name: </div>
+                  <div class="col-md-6" style="margin-bottom: 10px; font-size: smaller;">Total Sweats:</div>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-3" style="margin-left: 15px; margin-right: 15px; margin-bottom: 15px;">
+              <div class="box" style="width:100%; background: white">
+                <div class="row mt-3" style="display: flex; justify-content: space-between; align-items: center;">
+                  <div class="col-md-6" style="margin-bottom: 10px">Friend Name: </div>
+                  <div class="col-md-6" style="margin-bottom: 10px; font-size: smaller;">Total Sweats:</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="right-bottom-div" style="background:lightgrey; padding: 20px; margin-bottom: 30px;">
+            <!-- content for the right div goes here -->
             <form action="/addFriend" method="POST">
               <label for="friendID">Friend ID</label>
               <input type="text" id="friendID" name="friendID">
@@ -60,12 +122,13 @@
   </main>
 
 
+
   <style>
     .white-btn {
       background-color: white;
       color: black;
     }
-    
+
     .btn-custome-width {
       width: 150px;
     }
