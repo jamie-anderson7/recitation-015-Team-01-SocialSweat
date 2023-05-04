@@ -10,11 +10,17 @@ const session = require('express-session'); // To set the session object. To sto
 const bcrypt = require('bcrypt'); //  To hash passwords
 const axios = require('axios'); // To make HTTP requests from our server. We'll learn more about it in Part B.
 
-
+app.set('view engine', 'ejs'); // set the view engine to EJS
+// app.use(bodyParser.json()); // specify the usage of JSON for parsing request body.
 const path = require('path')
-console.log(path.join(__dirname,'/recources/img'));
-app.use(express.static(path.join(__dirname,'/recources/img')));
+// console.log(path.join(__dirname,'/resources/img'));
+app.use(express.static(path.join(__dirname,'/resources/img')));
 app.use(express.static(__dirname + '/public'));
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
+);
 
 
 
@@ -53,8 +59,7 @@ db.connect()
 // <!-- Section 3 : App Settings -->
 // *****************************************************
 
-app.set('view engine', 'ejs'); // set the view engine to EJS
-app.use(bodyParser.json()); // specify the usage of JSON for parsing request body.
+
 
 // initialize session variables
 app.use(
@@ -65,11 +70,6 @@ app.use(
   })
 );
 
-app.use(
-  bodyParser.urlencoded({
-    extended: true,
-  })
-);
 
 
 app.get("/", (req, res) => {
@@ -89,14 +89,34 @@ app.post("/register", async (req, res) => {
 
   // To-DO: Insert username and hashed password into 'users' table
   let ins = `INSERT INTO users (username, password, sweats) VALUES ('${req.body.username}', '${hash}',0);`;
-  db.any(ins)
-  .then(data => {
-    res.redirect("/login");
-  })
-  .catch( (err) => {
-    console.log(err);
+  let check = `SELECT * FROM users WHERE username = '${req.body.username}'`;
+  db.any(check)
+  .then((checkResult) => {
+    console.log(checkResult);
+  // This checks if any rows were returned
+  if(checkResult.length < 1)
+  {
+    db.any(ins)
+.then(data => {
+      res.redirect("login");
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  } 
+  // This case means that there are not any users that match the friend use id
+  else
+  {
+    res.render("partials/message", {
+      message : 'Error, username already exists, pick a different one',
+      error : true
+    });
+  }
+})
+.catch( (err) => {
+  console.log(err);
     res.redirect("/register");
-  });
+});
 });
 
 //LeaderBoard
@@ -166,9 +186,6 @@ app.post("/login", async (req, res) => {
       req.session.save();
       // res.redirect("/discover");
       res.redirect('/workouts');
-      res.status(200).json({
-        message: 'Success'
-      });
   
     }
     else{
@@ -201,20 +218,61 @@ app.post('/addFriend', (req, res) => {
   let addForward = `INSERT INTO friends (user_id, friend_id) VALUES ('${user}', '${friend}');`;
   let addReverse = `INSERT INTO friends (user_id, friend_id) VALUES ('${friend}', '${user}');`;
   let check = `SELECT * FROM users WHERE user_id = '${friend}';`;
+  let checkAlreadyFriends = `SELECT * FROM friends WHERE friend_id = '${friend}' AND user_id = '${user}'`;
+  // Required to render the leaderboard multiple times
+  let query = `SELECT users.user_id, sweats, username FROM users
+  INNER JOIN friends
+  ON friends.user_id = '${req.session.user.user_id}' AND users.user_id = friends.friend_id ORDER BY sweats LIMIT 6;`;
 
   db.any(check)
   .then((checkResult) => {
     // This checks if any rows were returned
     if(checkResult.length > 0)
     {
-      // Adds to friends table
-      db.task('addFriend', (task) => {
-        return task.batch([task.any(addForward), task.any(addReverse)]);
-      })
-      .then((data) => {
-        res.render("partials/message", {
-          message: 'Friend added successfully.'
-        });
+      db.any(checkAlreadyFriends)
+      .then((alreadyFriendsResult) => {
+        if(alreadyFriendsResult.length > 0)
+        {
+          // Passes friends back to leaderboard
+          db.any(query)
+          .then(friendsResult => {
+            // Renders leaderboard and message
+            res.render("pages/leaderboard", {
+              message: 'Cannot add, already friends with that user',
+              friends: friendsResult,
+              userID: req.session.user_id
+            });
+          })
+          .catch( (err) => {
+            console.log(err);
+          });
+        }
+        else
+        {
+          // Adds to friends table
+          db.task('addFriend', (task) => {
+            return task.batch([task.any(addForward), task.any(addReverse)]);
+          })
+          .then((data) => {
+            // Passes friends back to leaderboard
+            db.any(query)
+            .then(friendsResult => {
+              // Renders leaderboard and message
+              res.render("pages/leaderboard", {
+                message: 'Friend added successfully.',
+                friends: friendsResult,
+                userID: req.session.user_id
+              });
+            })
+            .catch( (err) => {
+              console.log(err);
+            });
+            
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -223,10 +281,21 @@ app.post('/addFriend', (req, res) => {
     // This case means that there are not any users that match the friend use id
     else
     {
-      res.render("partials/message", {
-        message : 'Cannot add friend, user ID does not exist.',
-        error : true
+      
+      // Passes friends back to leaderboard
+      db.any(query)
+      .then(friendsResult => {
+        // Renders leaderboard and message
+        res.render("pages/leaderboard", {
+          message : 'Cannot add friend, user ID does not exist.',
+          friends: friendsResult,
+          userID: req.session.user_id
+        });
+      })
+      .catch( (err) => {
+        console.log(err);
       });
+      
     }
   })
   .catch( (err) => {
@@ -291,6 +360,7 @@ app.get('/workouts', (req, res) => {
       }).catch(function (error) {
         console.error(error);
       });
+
   } catch (error) {
     console.error(error);
     //need message for error
@@ -331,14 +401,163 @@ app.post('/workouts', async(req, res) => {
 //     });
 // });
 
-app.get("/calendar", (req, res) => {
-  res.render("pages/calendar")
+app.post("/addToCalendar", (req, res) => {
+  let workoutID;
+  // Checks if the workout is already in the database
+  let findWorkout = `SELECT * FROM workouts WHERE name = '${req.body.workoutName}';`;
+  // Inserts the workout into users_to_workouts, stores the user ID, workout ID, and time
+  let addForCalendar = `INSERT INTO users_to_workouts (user_id, workout_name) VALUES ('${req.session.user.user_id}', '${req.body.workoutName}');`;
+  // Inserts a new workout into the database
+  let addWorkout = `INSERT INTO workouts (name, difficulty, instructions) VALUES ('${req.body.workoutName}', '${req.body.difficulty}', '${req.body.instructions}');`;
+
+  
+
+  // Checks if the workout is already in the database
+  db.any(findWorkout)
+  .then((foundWorkout) => {
+    // This means that there is not something with the same name
+    if(!(foundWorkout.length > 0))
+    {
+      db.any(addWorkout)
+      .then((redundant) => {
+
+      })
+      .catch((err) => {
+        console.log(err);
+        // res.render("partials/message", {
+        //   message: err
+        // });
+        res.redirect("/workouts");
+      });
+      
+    }
+    // Connects the user to the workout
+    db.any(addForCalendar)
+    .then((added) => {
+      res.redirect("/calendar");
+    })
+    .catch((err) => {
+      console.log(err);
+      res.render("partials/message", {
+        message: err
+      });
+      // res.redirect("/workouts");
+    });
+
+  })
+  .catch((err) => {
+    console.log(err);
+    res.render("partials/message", {
+      message: err
+    });
+    // res.redirect("/workouts");
+  });
 });
+
+
+
 
 //logout
 app.get("/logout", (req, res) => {
   req.session.destroy();
   res.render("pages/login");
 });
+
+
+//these are the API routes that edit the users list of workouts in the calendar ie "CALENDAR_WORKOUTS"
+
+// app.get("/calendar", (req, res) => {
+//   try{
+//   const get_workouts = `SELECT workout_id, workout, day, time FROM calendar_workouts WHERE user_id = ${req.session.user.user_id};`;
+//   const get_friends_workouts = `SELECT friend_id, workout_id, workout, day, time FROM friends INNER JOIN 
+//   calendar_workouts ON friends.friend_id = calendar_workouts.user_id WHERE friends.user_id =  ${req.session.user.user_id}`;
+//   db.task('addFriend', (task) => {
+//     task.batch([task.any(get_workouts), task.any(get_friends_workouts)]);
+//   })
+//     .then((result) => {
+//       console.log(result);
+//       res.render('pages/calendar', { workouts: result[0], friends_workouts: result[1], sweats: req.session.user.sweats});
+//     })
+//     .catch((err) => {
+//       console.error(err);
+//       res.sendStatus(500); // internal server error
+//     });
+//   }
+//   catch(error){
+//     console.error(err);
+//     res.render("pages/login");
+//   }
+// });
+
+app.get("/calendar", async (req, res) => {
+  try {
+    const data = await db.task('getCalendarData', async (task) => {
+      const get_workouts = `SELECT workout_id, workout, day, time FROM calendar_workouts WHERE user_id = ${req.session.user.user_id};`;
+      const get_friends_workouts = `SELECT friend_id, workout_id, workout, day, time FROM friends INNER JOIN 
+        calendar_workouts ON friends.friend_id = calendar_workouts.user_id WHERE friends.user_id =  ${req.session.user.user_id}`;
+      const [workouts, friends_workouts] = await task.batch([task.any(get_workouts), task.any(get_friends_workouts)]);
+      return { workouts, friends_workouts };
+    });
+    res.render('pages/calendar', { workouts: data.workouts, friends_workouts: data.friends_workouts, sweats: req.session.user.sweats });
+  } catch (err) {
+    console.error(err);
+    res.render("pages/login"); // internal server error
+  }
+});
+
+
+
+
+app.post('/calendar/add', (req, res) => {
+  const { workout, day, time } = req.body;
+  const user_id = req.session.user.user_id;
+
+  const query = `INSERT INTO calendar_workouts (workout, day, time, user_id) 
+                 VALUES ('${workout}', '${day}', '${time}', ${user_id})`;
+
+  db.query(query)
+    .then((result) => {
+      res.redirect('/calendar');
+      // res.render('pages/calendar', { workouts: result, sweats: req.session.user.sweats });
+    })
+    .catch((err) => {
+      console.error(err);
+      res.sendStatus(500); // internal server error
+    });
+});
+
+
+
+app.post('/calendar/update', (req, res) => {
+  const { workout_update, day_update, time_update} = req.body;
+  const status = req.body.submit_button;
+  const user_id = req.session.user.user_id;
+
+  const update_workout = `UPDATE calendar_workouts SET workout = $1, day = $2, time = $3 WHERE workout_id = ${req.body.workout_id_update}`;
+  const delete_workout = `DELETE FROM calendar_workouts WHERE workout_id = ${req.body.workout_id_update}`;
+
+  if(status == 'update'){
+  db.query(update_workout, [workout_update[0], day_update, workout_update[1]])
+    .then((result) => {
+      res.redirect('/calendar');
+    })
+    .catch((err) => {
+      console.error(err);
+      res.sendStatus(500); // internal server error
+    });
+  }
+  else {
+
+  db.query(delete_workout)
+    .then((result) => {
+      res.redirect('/calendar');
+    })
+    .catch((err) => {
+      console.error(err);
+      res.sendStatus(500); // internal server error
+    });
+  }
+});
+
 
   module.exports = app.listen(3000);
