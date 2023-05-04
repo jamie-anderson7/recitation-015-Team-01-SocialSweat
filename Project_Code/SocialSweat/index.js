@@ -89,32 +89,15 @@ app.post("/register", async (req, res) => {
 
   // To-DO: Insert username and hashed password into 'users' table
   let ins = `INSERT INTO users (username, password, sweats) VALUES ('${req.body.username}', '${hash}',0);`;
-  let check = `SELECT * FROM users WHERE username = '${req.body.username}'`;
-  db.any(check)
-  .then((checkResult) => {
-    console.log(checkResult);
-  // This checks if any rows were returned
-  if(checkResult.length < 1)
-  {
-    db.any(ins)
-.then(data => {
-      res.redirect("login");
-    })
-    .catch((error) => {
-      console.log(error);
+  db.any(ins)
+  .then(data => {
+    res.render("pages/login", {
+      message: 'User added successfully',
+      color: 'green'
     });
-  } 
-  // This case means that there are not any users that match the friend use id
-  else
-  {
-    res.render("partials/message", {
-      message : 'Error, username already exists, pick a different one',
-      error : true
-    });
-  }
-})
-.catch( (err) => {
-  console.log(err);
+  })
+  .catch( (err) => {
+    console.log(err);
     res.redirect("/register");
 });
 });
@@ -167,9 +150,12 @@ app.post("/login", async (req, res) => {
   
   db.one(query)
   .then( async (user) => {
-    if(user == '')
+    if(user.length)
     {
-      res.render('/register');
+      res.render('pages/register', {
+        message : 'User does not exist',
+        color: 'red'
+      });
     }
     
     // check if password from request matches with password in DB
@@ -184,7 +170,6 @@ app.post("/login", async (req, res) => {
       // Commented out because there is no discover page
       req.session.user = user;
       req.session.save();
-      // res.redirect("/discover");
       res.redirect('/workouts');
   
     }
@@ -195,17 +180,23 @@ app.post("/login", async (req, res) => {
       // });
       // console.log('Incorrect username or password.');
 
-      res.redirect('/login');
-      //work on getting modal to display, currently just reloads login page
-      res.status(200).json({
-        message: 'Incorrect username or password'
+      res.render('pages/login', {
+        message: 'Incorrect username or password',
+        color: 'red'
       });
+      //work on getting modal to display, currently just reloads login page
+      // res.status(200).json({
+      //   message: 'Incorrect username or password'
+      // });
       
     }
   })
   .catch((error) => {
     console.log(error)
-    res.render("pages/register")
+    res.render('pages/register', {
+      message : 'User does not exist',
+      color: 'red'
+    });
   })
 
 
@@ -460,7 +451,10 @@ app.post("/addToCalendar", (req, res) => {
 //logout
 app.get("/logout", (req, res) => {
   req.session.destroy();
-  res.render("pages/login");
+  res.render("pages/login", {
+    message : 'Logged out successfully',
+    color : 'green'
+  });
 });
 
 
