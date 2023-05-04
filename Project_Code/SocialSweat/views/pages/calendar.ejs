@@ -13,13 +13,16 @@
                 document.querySelector('#day_update').value = day;
             }
             </script>
+            <div id="sweats" class="row" style="padding-left: 20px;">
+                Sweats: <%= sweats %>
+            </div>
         <div id="calendar" class="row">
             <% const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']; %>
             <% days.forEach(function(day) { %>
                 <div class="col-sm m-1 bg-white rounded px-1 px-md-2" id="<%- day.toLowerCase() %>">
                     <div class="h6 text-center position-relative py-2">
                         <%= day %>
-                        <i class="'bi bi-calendar-plus btn position-absolute translate-middle start-100  rounded p-0 btn-link'" 
+                        <i class="'bi bi-calendar-plus btn position-absolute translate-middle start-100 </i>'" 
                         onclick="document.getElementById('create-modal').style.display='block'"></i>
                     </div>
                     <div class="event-container">
@@ -28,6 +31,14 @@
                                 <div class="event row border rounded m-1 py-1" id="workout-<%= workout.workout_id %>">
                                     <div class="col event-title" onclick="openUpdateModal('<%= workout.workout_id %>', '<%= workout.workout %>', '<%= workout.day %>', '<%= workout.time %>')">
                                         <b><%= workout.workout %></b> <p><%= workout.time %></p>  </div>
+                                </div>
+                            <% } %>
+                        <% }); %>
+                        <% friends_workouts.forEach(function(workout) { %>
+                            <% if(workout.day == day) { %>
+                                <div class="event row border rounded m-1 py-1" id="workout-<%= workout.workout_id %>" style="background-color:rgb(225, 255, 251)">
+                                    <div class="col event-title">
+                                        <p><i><%= workout.username %></i></p> <b><%= workout.workout %></b> <p><%= workout.time %></p>  </div>
                                 </div>
                             <% } %>
                         <% }); %>
@@ -46,10 +57,18 @@
                 </div>
                 <div class="modal-body">
                   <form action="/calendar/add" method="POST">
-                  <div class="mb-3" id="workoutDiv">
-                      <label class="form-label">Workout</label>
-                      <input type="text" class="form-control" id="workout" name="workout" aria-describedby="" required>
-                  </div>
+                    <div class="mb-3" id="workoutDiv">
+                        <label class="form-label">Workout</label>
+
+                        <input type="text" class="form-control" id="workout_id" name="workout_id" hidden>
+
+                        <select class="form-select" name="workout" id="workout">
+                          <% owned_workouts.forEach(function(workout) { %>
+                              <option id="<%= workout.workout_name %>_option"><%= workout.workout_name %></option>
+                          <% }); %>
+                        </select>
+                    </div>
+                </div>
                   
                   <div class="mb-3" id="weekdayDiv">
                       <label class="form-label">Weekday</label>
@@ -97,7 +116,11 @@
 
                           <input type="text" class="form-control" id="workout_id_update" name="workout_id_update" hidden>
 
-                          <input type="text" class="form-control" id="workout_update" name="workout_update" aria-describedby="" required>
+                          <select class="form-select" name="workout_update" id="workout_update">
+                            <% owned_workouts.forEach(function(workout) { %>
+                                <option id="<%= workout.workout_name %>_option"><%= workout.workout_name %></option>
+                            <% }); %>
+                          </select>
                       </div>
                       
                       <div class="mb-3" id="weekdayDiv">

@@ -1,53 +1,171 @@
-<script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-  const myModal = document.getElementById('myModal');
-  const myInput = document.getElementById('myInput');
-
-  myModal.addEventListener('shown.bs.modal', () => {
-    myInput.focus();
-  });
-</script>
-
+<head>
+  <!-- Add the required Bootstrap stylesheet and JavaScript files -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNSLrM7"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    // Make an AJAX call to the server to get the URL of a random image
+    $.get('/get-random-image', function(data) {$('#random-img1').attr('src', data);});$.get('/get-random-image', function(data) {$('#random-img2').attr('src', data);});$.get('/get-random-image', function(data) {$('#random-img3').attr('src', data);});$.get('/get-random-image', function(data) {$('#random-img4').attr('src', data);});$.get('/get-random-image', function(data) {$('#random-img5').attr('src', data);});$.get('/get-random-image', function(data) {$('#random-img6').attr('src', data);});$.get('/get-random-image', function(data) {$('#random-img7').attr('src', data);});$.get('/get-random-image', function(data) {$('#random-img8').attr('src', data);});$.get('/get-random-image', function(data) {$('#random-img9').attr('src', data);});$.get('/get-random-image', function(data) {$('#random-img10').attr('src', data);});
+    $.get('/get-random-image', function(data) {$('#random-img11').attr('src', data);});$.get('/get-random-image', function(data) {$('#random-img12').attr('src', data);});$.get('/get-random-image', function(data) {$('#random-img13').attr('src', data);});$.get('/get-random-image', function(data) {$('#random-img14').attr('src', data);});$.get('/get-random-image', function(data) {$('#random-img15').attr('src', data);});$.get('/get-random-image', function(data) {$('#random-img16').attr('src', data);});$.get('/get-random-image', function(data) {$('#random-img17').attr('src', data);});$.get('/get-random-image', function(data) {$('#random-img18').attr('src', data);});$.get('/get-random-image', function(data) {$('#random-img19').attr('src', data);});$.get('/get-random-image', function(data) {$('#random-img20').attr('src', data);});
+  </script>
+</head>
 <%- include ('../partials/header') %>
+
+
 
   <main>
     <div class="container">
-      <!-- THE REST OF YOUR HTML CODE GOES HERE -->
       <div class="row mt-5">
-        <div class="col-md-8 left-col" style="margin-bottom: 40px; margin-right: 50px;">
+        <div class="col-md-8 left-col" style="width: 70%">
           <div class="left-div" style="background:lightgrey; padding: 20px; margin-bottom: 30px;">
             <!-- content for the left div goes here -->
             <div class="title-div" style="text-align: center; margin-bottom: 30px;">
               <h2>Feed</h2>
             </div>
+            <% var counter = 1; %>
             <% friends.forEach(function(item) {%>
             <div class="row" style="margin-right: 0px; margin-left: 0px;">
               <div class="col-md-6 mb-3">
                 <div class="box" style="width:100%; background: white; border: 1px solid black; padding: 10px;">
-                  <img src="img1.jpg" alt="image1" style="width:100%">
+                  <img id="random-img<%= counter %>" src="" style="width:100%; height:200px;">
                   <div class="row mt-3">
                     <div class="col-md-6">Friend Name: <%- item.username %></div>
-                    <div class="col-md-6">Workout Name:</div>
+                    <div class="col-md-6">Workout Name: <%- item.sweats %></div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <div class="box" style="width:100%; background: white; border: 1px solid black; padding: 10px;">
+                  <img id="random-img<%= counter+1 %>" src="" style="width:100%; height:200px;">
+                  <div class="row mt-3">
+                    <div class="col-md-6">Friend Name: <%- item.username %></div>
+                    <div class="col-md-6">Workout Name: <%- item.sweats %></div>
                   </div>
                 </div>
               </div>
             </div>
+            <% counter += 2; %>
             <% }); %>
+            <div class="row" style="margin-right: 0px; margin-left: 0px;">
+              <div class="container">
+                <!-- Button to open the modal -->
+                <div class="modal-button">
+                  <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#myModal">
+                    Upload
+                  </button>
+                </div>
+                <!-- Modal -->
+                <div class="modal" id="myModal">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <!-- Modal Header -->
+                      <div class="modal-header">
+                        <h4 class="modal-title">Upload your images here</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      </div>
+                      <!-- Modal body -->
+                      <div class="modal-body">
+                        <form action="/upload" method="post" enctype="multipart/form-data">
+                          <input type="file" name="image">
+                          <button type="submit">Upload</button>
+                        </form>
+                      </div>
+                      <!-- Modal footer -->
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="col-md-4">
-          <div class="right-div" style="background:lightgrey">
-            <!-- content for the right div goes here -->  
+        <div class="col-md-4 right-col" style="width: 30%;">
+          <div class="right-top-div" style="background:lightgrey; padding: 20px; margin-bottom: 30px;">
+            <!-- content for the right div goes here -->
+            <h5 style="margin-bottom: 45px">Leaderboard</h5>
+            <!-- foreach loop -->
+            <% friends.forEach(function(item) {%>
+            <div class="row mt-3" style="margin-left: 15px; margin-right: 15px; margin-bottom: 50px;">
+              <div class="box" style="width:100%; background: white">
+                <div class="row mt-3" style="display: flex; justify-content: space-between; align-items: center;">
+                  <div class="col-md-6" style="margin-bottom: 10px">Friend Name: <%- item.username %></div>
+                  <div class="col-md-6" style="margin-bottom: 10px; font-size: smaller;">Total Sweats: <%- item.sweats %></div>
+                </div>
+              </div>
+            </div>
+            <!-- end the loop -->
+            <% }); %>
+          <div class="right-bottom-div" style="background:lightgrey; padding: 20px; margin-bottom: 30px;">
+            <!-- content for the right div goes here -->
+            <div class="container">
+              <!-- Button to open the modal -->
+              <div class="modal-button">
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#myModal2">
+                  Recommended Friends
+                </button>
+              </div>
+              <!-- Modal -->
+              <div class="modal" id="myModal2">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                      <h4 class="modal-title">Recommended Friends</h4>
+                      <button type="button" class="close" data-dismiss="modal" id="myModal">&times;</button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                      <% friends.forEach(function(item) {%>
+                      <div class="row mt-3" style="margin-left: 15px; margin-right: 15px; margin-bottom: 50px;">
+                        <div class="box" style="width:100%; background: lemonchiffon">
+                          <div class="row mt-3"
+                            style="display: flex; justify-content: space-between; align-items: center;">
+                            <div class="col-md-6" style="margin-bottom: 10px">Friend Name: <%- item.username %></div>
+                            <div class="col-md-6" style="margin-bottom: 10px; font-size: smaller;">Total Sweats: <%- item.sweats %></div>
+                          </div>
+                        </div>
+                      </div>
+                      <% }); %>
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
             <form action="/addFriend" method="POST">
               <label for="friendID">Friend ID</label>
               <input type="text" id="friendID" name="friendID">
-              
+
               <input type="submit" label="Submit">
             </form>
-            <p style=" align-self: center;">
+            <p style="align-content: center;">
               Your User ID: <%- userID %>
             </p>
+            <div>
+              <% if(locals.message){ %>
+                <p>
+                  <%= message %>
+                </p>
+                <% }%>
+            </div>
           </div>
         </div>
       </div>
@@ -55,14 +173,15 @@
   </main>
 
 
+
   <style>
-    .white-btn {
-      background-color: white;
-      color: black;
-    }
-    
-    .btn-custome-width {
-      width: 150px;
+    .modal-button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 5vh;
+      margin-bottom: 10px;
+      /* Set the height of the outer div to the height of the viewport */
     }
   </style>
 
