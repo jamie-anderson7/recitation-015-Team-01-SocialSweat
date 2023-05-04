@@ -265,30 +265,32 @@ let diffVar = 'beginner';
 //   diffVar = 'expert';
 // } 
 
-app.get('/workouts',(req, res) => {
+app.get('/workouts', (req, res) => {
   try {
-    let sweatVal = req.session.user.sweats;
-    let diffVar = 'beginner';
-    if (sweatVal >= 100) {
-      diffVar = 'intermediate';
-    } else if (sweatVal >= 200) {
-      diffVar = 'expert';
-    } 
-    const options = {
-      method: 'GET',
-      url: 'https://exercises-by-api-ninjas.p.rapidapi.com/v1/exercises',
-      params: {difficulty: diffVar},
-      headers: {
-        'X-RapidAPI-Key': 'd118bffb72mshefac1d32ada5f14p1523e5jsnc3415735b0dc',
-        'X-RapidAPI-Host': 'exercises-by-api-ninjas.p.rapidapi.com'
-      }
-    };/* Deleted a 'g' here because it caused a syntax error */
-    axios.request(options).then(function (response) {
-      console.log(response.data)
-      res.render('pages/workouts', {data: response.data, sweats: sweatVal})
-    }).catch(function (error) {
-      console.error(error);
-    });
+      let Value = Math.floor(Math.random()*10)
+      let sweatVal = req.session.user.sweats;
+      let diffVar = 'beginner';
+      if (sweatVal >= 100) {
+        diffVar = 'intermediate';
+      } else if (sweatVal >= 200) {
+        diffVar = 'expert';
+      } 
+      const options = {
+        method: 'GET',
+        url: 'https://exercises-by-api-ninjas.p.rapidapi.com/v1/exercises',
+        params: {difficulty: diffVar, offset: Value},
+  
+        headers: {
+          'X-RapidAPI-Key': 'd118bffb72mshefac1d32ada5f14p1523e5jsnc3415735b0dc',
+          'X-RapidAPI-Host': 'exercises-by-api-ninjas.p.rapidapi.com'
+        }
+      };/* Deleted a 'g' here because it caused a syntax error */
+      axios.request(options).then(function (response) {
+        console.log(response.data)
+        res.render('pages/workouts', {data: response.data, sweats: sweatVal})
+      }).catch(function (error) {
+        console.error(error);
+      });
   } catch (error) {
     console.error(error);
     //need message for error
@@ -298,7 +300,6 @@ app.get('/workouts',(req, res) => {
   }
   
 });
-//sweats doesn't update yet
 app.post('/workouts', async(req, res) => {
   let sweatVal = req.session.user.sweats;
   sweatVal = sweatVal + 10
