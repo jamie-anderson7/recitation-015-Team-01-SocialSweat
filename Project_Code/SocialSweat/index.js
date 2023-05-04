@@ -415,7 +415,6 @@ app.get('/workouts', (req, res) => {
         }
       };/* Deleted a 'g' here because it caused a syntax error */
       axios.request(options).then(function (response) {
-        console.log(response.data)
         res.render('pages/workouts', {data: response.data, sweats: sweatVal})
       }).catch(function (error) {
         console.error(error);
@@ -541,7 +540,7 @@ app.post("/saveWorkout", (req, res) => {
     // Connects the user to the workout
     db.any(addForCalendar)
     .then((added) => {
-      res.redirect("/calendar");
+      res.redirect("/workouts");
     })
     .catch((err) => {
       console.log(err);
@@ -576,39 +575,22 @@ app.get("/logout", (req, res) => {
 
 //these are the API routes that edit the users list of workouts in the calendar ie "CALENDAR_WORKOUTS"
 
-// app.get("/calendar", (req, res) => {
-//   try{
-//   const get_workouts = `SELECT workout_id, workout, day, time FROM calendar_workouts WHERE user_id = ${req.session.user.user_id};`;
-//   const get_friends_workouts = `SELECT friend_id, workout_id, workout, day, time FROM friends INNER JOIN 
-//   calendar_workouts ON friends.friend_id = calendar_workouts.user_id WHERE friends.user_id =  ${req.session.user.user_id}`;
-//   db.task('addFriend', (task) => {
-//     task.batch([task.any(get_workouts), task.any(get_friends_workouts)]);
-//   })
-//     .then((result) => {
-//       console.log(result);
-//       res.render('pages/calendar', { workouts: result[0], friends_workouts: result[1], sweats: req.session.user.sweats});
-//     })
-//     .catch((err) => {
-//       console.error(err);
-//       res.sendStatus(500); // internal server error
-//     });
-//   }
-//   catch(error){
-//     console.error(err);
-//     res.render("pages/login");
-//   }
-// });
-
 app.get("/calendar", async (req, res) => {
   try {
     const data = await db.task('getCalendarData', async (task) => {
       const get_workouts = `SELECT workout_id, workout, day, time FROM calendar_workouts WHERE user_id = ${req.session.user.user_id};`;
-      const get_friends_workouts = `SELECT friend_id, workout_id, workout, day, time FROM friends INNER JOIN 
-        calendar_workouts ON friends.friend_id = calendar_workouts.user_id WHERE friends.user_id =  ${req.session.user.user_id}`;
-      const [workouts, friends_workouts] = await task.batch([task.any(get_workouts), task.any(get_friends_workouts)]);
-      return { workouts, friends_workouts };
+      const get_friends_workouts = `SELECT friend_id, username, workout_id, workout, day, time FROM friends INNER JOIN 
+        calendar_workouts ON friends.friend_id = calendar_workouts.user_id INNER JOIN
+        users ON users.user_id = friends.friend_id WHERE friends.user_id =  ${req.session.user.user_id};`;
+      const get_owned_workouts = `SELECT workout_name FROM users_to_workouts WHERE user_id = ${req.session.user.user_id};`;
+
+      const [workouts, friends_workouts, owned_workouts] = await task.batch([task.any(get_workouts), 
+        task.any(get_friends_workouts), task.any(get_owned_workouts)]);
+        
+      return { workouts, friends_workouts, owned_workouts };
     });
-    res.render('pages/calendar', { workouts: data.workouts, friends_workouts: data.friends_workouts, sweats: req.session.user.sweats });
+    res.render('pages/calendar', { workouts: data.workouts, friends_workouts: data.friends_workouts, 
+      owned_workouts: data.owned_workouts, sweats: req.session.user.sweats });
   } catch (err) {
     console.error(err);
     res.render("pages/login"); // internal server error
