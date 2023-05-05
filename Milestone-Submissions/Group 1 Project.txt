@@ -1,0 +1,28 @@
+﻿Project Ideas:
+* Online games
+* Review site (Yelp, TripAdvisor)
+* Workout social site
+* Money tracking game
+* Recipe search/review site
+* Site for reviewing movies with friends
+
+
+
+
+Requirements:
+* Github project board
+* Github repository with branches for each user story
+* Application
+   * Login page
+   * Registration page
+   * Homepage
+   * Server that allows UI to communicate with the database
+   * Database to store user info
+   * Passwords (hashed and stored in database)
+   * Session management
+   * Application built in docker container
+* Readme file
+* Automated test cases (lab 11)
+* Deployment environment (lab 13)
+* Weekly TA meetings (must have weekly commits, updated repo, release notes, plan for following week)
+   * Minutes from every meeting

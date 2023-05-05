@@ -1,0 +1,13 @@
+﻿Alex: Fixed the login so we can use the b-crypt. Working on database, did a bit with the .post and .get for the index file. 
+
+
+Elliot: Working on Leaderboard page. Which includes the social network, the leaderboard, and a search friends.
+
+
+Imad: Working on implementing the calender
+
+
+Jamie: Working on the database with Alex to make things smoother
+
+
+Sena: Working on implementing the cards bootstrap for the workouts page and making the login and logout cleaner. Might add styling to the page.
